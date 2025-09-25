@@ -190,24 +190,33 @@
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
         }
 
-        /* Keyboard Shortcut Hints */
+        /* Enhanced Keyboard Shortcut Hints */
         .shortcut-hint {
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 8px;
-            color: var(--text-secondary);
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 9px;
+            font-weight: 700;
             padding: 2px 6px;
             border-radius: 4px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            margin-left: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(3px);
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            min-width: 18px;
+            text-align: center;
+            opacity: 0.8;
+            transition: all 0.3s ease;
         }
 
         .formation-btn:hover .shortcut-hint,
         .action-btn:hover .shortcut-hint {
+            background: rgba(255, 255, 255, 0.4);
+            color: white;
             opacity: 1;
+            transform: scale(1.05);
+        }
         }
 
         @keyframes fieldGlow {
@@ -874,22 +883,6 @@
             font-size: 12px;
         }
 
-        .weather-widget {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1001;
-        }
-
         .pass-line {
             stroke: #60a5fa;
             stroke-width: 2;
@@ -1195,17 +1188,88 @@
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
+
+        /* Fullscreen Styling - Field Only Mode */
+        .fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: var(--field-color) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            transition: all 0.3s ease !important;
+            box-sizing: border-box;
+            overflow: hidden !important;
+        }
+
+        .fullscreen-mode .field-container {
+            position: relative !important;
+            width: 98vw !important;
+            height: 95vh !important;
+            margin: 1vh auto !important;
+            padding: 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .fullscreen-mode .field {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: none !important;
+            max-height: none !important;
+            margin: 0 !important;
+        }
+
+        /* Hide ALL UI elements in fullscreen - Field Only */
+        .fullscreen-mode .controls-panel,
+        .fullscreen-mode .scoreboard,
+        .fullscreen-mode .theme-switcher,
+        .fullscreen-mode .player-database,
+        .fullscreen-mode .substitutions-panel,
+        .fullscreen-mode .match-events,
+        .fullscreen-mode .statistics-panel {
+            display: none !important;
+        }
+        
+        /* Keep exit button visible in fullscreen */
+        .fullscreen-mode .fullscreen-exit-btn {
+            display: block !important;
+            z-index: 10001 !important;
+        }
+
+        /* Fullscreen exit button */
+        .fullscreen-exit-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .fullscreen-mode .fullscreen-exit-btn {
+            display: block;
+        }
+
+        .fullscreen-exit-btn:hover {
+            background: var(--accent-action);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body data-theme="dark">
-    <!-- Weather Widget -->
-    <div class="weather-widget" id="weatherWidget">
-        <span id="weatherIcon">☀️</span>
-        <span id="weatherText">Sunny, 22°C</span>
-        <span>🌬️</span>
-        <span id="windSpeed">12 km/h</span>
-    </div>
-
     <!-- Match Events Panel -->
     <div class="match-events" id="matchEvents">
         <h3 style="color: var(--text-primary); margin-bottom: 15px; text-align: center;">📊 Match Events</h3>
@@ -1229,17 +1293,16 @@
         </div>
     </div>
 
-    <!-- Minimap -->
-    <div class="minimap" id="minimap">
-        <div style="position: absolute; top: 5px; left: 5px; color: white; font-size: 10px; font-weight: bold;">Field Overview</div>
-        <!-- Mini players will be populated by JavaScript -->
-    </div>
-
     <!-- Theme Switcher -->
     <div class="theme-switcher">
         <button class="theme-btn active" onclick="setTheme('dark')" title="Dark Theme (Alt+D)">🌙</button>
         <button class="theme-btn" onclick="setTheme('light')" title="Light Theme (Alt+L)">☀️</button>
     </div>
+
+    <!-- Fullscreen Exit Button -->
+    <button class="fullscreen-exit-btn" id="fullscreen-exit-btn" onclick="exitFullscreen()" title="Exit Fullscreen (ESC or F)">
+        ✖️ Exit Fullscreen
+    </button>
 
     <!-- Player Database Panel -->
     <div class="player-database" id="playerDatabase">
@@ -1292,112 +1355,111 @@
         <!-- Interactive Controls -->
         <div class="controls-panel">
             <div class="control-group">
-                <div class="control-label">Home Formation</div>
+                <div class="control-label">🏠 Home Formation</div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="formation-btn home-formation active" onclick="changeFormation('home', '433')" title="4-3-3">4-3-3
-                        <span class="shortcut-hint">1</span>
+                    <button class="formation-btn home-formation active" onclick="changeFormation('home', '433')" title="4-3-3 (Press 1)">4-3-3
+                        <span class="shortcut-hint">[1]</span>
                     </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '442')" title="4-4-2">4-4-2
-                        <span class="shortcut-hint">2</span>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '442')" title="4-4-2 (Press 2)">4-4-2
+                        <span class="shortcut-hint">[2]</span>
                     </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '352')" title="3-5-2">3-5-2
-                        <span class="shortcut-hint">3</span>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '352')" title="3-5-2 (Press 3)">3-5-2
+                        <span class="shortcut-hint">[3]</span>
                     </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '4231')" title="4-2-3-1">4-2-3-1
-                        <span class="shortcut-hint">4</span>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '4231')" title="4-2-3-1 (Press 4)">4-2-3-1
+                        <span class="shortcut-hint">[4]</span>
                     </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '532')" title="5-3-2">5-3-2
-                        <span class="shortcut-hint">5</span>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '532')" title="5-3-2 (Press 5)">5-3-2
+                        <span class="shortcut-hint">[5]</span>
                     </button>
                 </div>
             </div>
             
             <div class="control-group">
-                <div class="control-label">Away Formation</div>
+                <div class="control-label">🚌 Away Formation</div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="formation-btn away-formation active" onclick="changeFormation('away', '433')" title="4-3-3">4-3-3
-                        <span class="shortcut-hint">Q</span>
+                    <button class="formation-btn away-formation active" onclick="changeFormation('away', '433')" title="4-3-3 (Press Q)">4-3-3
+                        <span class="shortcut-hint">[Q]</span>
                     </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '442')" title="4-4-2">4-4-2
-                        <span class="shortcut-hint">W</span>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '442')" title="4-4-2 (Press W)">4-4-2
+                        <span class="shortcut-hint">[W]</span>
                     </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '352')" title="3-5-2">3-5-2
-                        <span class="shortcut-hint">E</span>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '352')" title="3-5-2 (Press E)">3-5-2
+                        <span class="shortcut-hint">[E]</span>
                     </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '4231')" title="4-2-3-1">4-2-3-1
-                        <span class="shortcut-hint">R</span>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '4231')" title="4-2-3-1 (Press R)">4-2-3-1
+                        <span class="shortcut-hint">[R]</span>
                     </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '532')" title="5-3-2">5-3-2
-                        <span class="shortcut-hint">T</span>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '532')" title="5-3-2 (Press T)">5-3-2
+                        <span class="shortcut-hint">[T]</span>
                     </button>
                 </div>
             </div>
             
             <div class="control-group">
-                <div class="control-label">Match Time</div>
-                <div class="match-timer" id="timer">45:00</div>
-            </div>
-            
-            <div class="control-group">
-                <div class="control-label">Score Control</div>
-                <div class="score-controls">
-                    <button class="score-btn" onclick="changeScore('home', -1)" title="Decrease Home Score">-</button>
-                    <span style="color: var(--text-primary); font-weight: bold;">Home</span>
-                    <button class="score-btn" onclick="changeScore('home', 1)" title="Increase Home Score">+</button>
-                    <span style="color: var(--text-primary); margin: 0 10px;">|</span>
-                    <button class="score-btn" onclick="changeScore('away', -1)" title="Decrease Away Score">-</button>
-                    <span style="color: var(--text-primary); font-weight: bold;">Away</span>
-                    <button class="score-btn" onclick="changeScore('away', 1)" title="Increase Away Score">+</button>
+                <div class="control-label">⚽ Score Control</div>
+                <div class="score-display" id="matchScore" style="font-size: 24px; font-weight: bold; text-align: center; margin: 8px 0; color: var(--accent-color);">0 - 0</div>
+                <div class="score-controls" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                    <div class="team-controls" style="display: flex; align-items: center; gap: 6px;">
+                        <button class="score-btn" onclick="changeScore('home', -1)" title="Decrease Home Score">−</button>
+                        <span style="color: var(--text-primary); font-weight: bold; min-width: 40px; text-align: center;">🏠 Home</span>
+                        <button class="score-btn" onclick="changeScore('home', 1)" title="Increase Home Score">+</button>
+                    </div>
+                    <div class="team-controls" style="display: flex; align-items: center; gap: 6px;">
+                        <button class="score-btn" onclick="changeScore('away', -1)" title="Decrease Away Score">−</button>
+                        <span style="color: var(--text-primary); font-weight: bold; min-width: 40px; text-align: center;">🚌 Away</span>
+                        <button class="score-btn" onclick="changeScore('away', 1)" title="Increase Away Score">+</button>
+                    </div>
                 </div>
             </div>
             
             <div class="control-group">
-                <div class="control-label">Tactical Tools</div>
+                <div class="control-label">🎨 Tactical Tools</div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="action-btn" onclick="toggleDrawingMode()" id="drawBtn" title="Drawing Mode (D)">✏️ Draw
-                        <span class="shortcut-hint">D</span>
+                    <button class="action-btn" onclick="toggleDrawingMode()" id="drawBtn" title="Drawing Mode (Press D)">✏️ Draw
+                        <span class="shortcut-hint">[D]</span>
                     </button>
-                    <button class="action-btn" onclick="clearDrawing()" title="Clear Drawing (C)">🗑️ Clear
-                        <span class="shortcut-hint">C</span>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <div class="control-label">Actions</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="action-btn" onclick="resetPositions()" title="Reset Positions (R)">🔄 Reset
-                        <span class="shortcut-hint">R</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleTimer()" title="Start/Stop Timer (Space)">⏯️ Timer
-                        <span class="shortcut-hint">Space</span>
-                    </button>
-                    <button class="action-btn" onclick="showTactics()" title="Show Tactics (T)">📋 Tactics
-                        <span class="shortcut-hint">G</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleSubstitutions()" title="Substitutions (S)">🔄 Subs
-                        <span class="shortcut-hint">S</span>
-                    </button>
-                    <button class="action-btn" onclick="togglePlayerDatabase()" title="Player Database (P)">👥 Players
-                        <span class="shortcut-hint">P</span>
+                    <button class="action-btn" onclick="clearDrawing()" title="Clear Drawing (Press C)">🗑️ Clear
+                        <span class="shortcut-hint">[C]</span>
                     </button>
                 </div>
             </div>
             
             <div class="control-group">
-                <div class="control-label">Analytics</div>
+                <div class="control-label">⚡ Actions</div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="action-btn" onclick="toggleMatchEvents()" title="Match Events (M)">📊 Events
-                        <span class="shortcut-hint">M</span>
+                    <button class="action-btn" onclick="resetPositions()" title="Reset Positions (Press R)">🔄 Reset
+                        <span class="shortcut-hint">[R]</span>
                     </button>
-                    <button class="action-btn" onclick="toggleStatistics()" title="Statistics (X)">📈 Stats
-                        <span class="shortcut-hint">X</span>
+                    <button class="action-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (Press F)">🔍 Fullscreen
+                        <span class="shortcut-hint">[F]</span>
                     </button>
-                    <button class="action-btn" onclick="toggleHeatmap()" title="Heatmap (H)">🔥 Heatmap
-                        <span class="shortcut-hint">H</span>
+                    <button class="action-btn" onclick="showTactics()" title="Show Tactics (Press G)">📋 Tactics
+                        <span class="shortcut-hint">[G]</span>
                     </button>
-                    <button class="action-btn" onclick="simulateMatch()" title="Auto Simulate (A)">⚡ Simulate
-                        <span class="shortcut-hint">A</span>
+                    <button class="action-btn" onclick="toggleSubstitutions()" title="Substitutions (Press S)">🔄 Subs
+                        <span class="shortcut-hint">[S]</span>
+                    </button>
+                    <button class="action-btn" onclick="togglePlayerDatabase()" title="Player Database (Press P)">👥 Players
+                        <span class="shortcut-hint">[P]</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">📊 Analytics</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="action-btn" onclick="toggleMatchEvents()" title="Match Events (Press V)">📊 Events
+                        <span class="shortcut-hint">[V]</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleStatistics()" title="Statistics (Press X)">📈 Stats
+                        <span class="shortcut-hint">[X]</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleHeatmap()" title="Heatmap (Press H)">🔥 Heatmap
+                        <span class="shortcut-hint">[H]</span>
+                    </button>
+                    <button class="action-btn" onclick="simulateMatch()" title="Simulate Match (Press M)">⚡ Simulate
+                        <span class="shortcut-hint">[M]</span>
                     </button>
                 </div>
             </div>
@@ -1822,21 +1884,12 @@
             setTheme(savedTheme);
             
             // Initialize advanced features
-            updateWeatherData();
             updateMatchStatistics();
             
             // Hide all advanced panels initially
             document.getElementById('matchEvents').style.display = 'none';
             document.getElementById('statisticsPanel').style.display = 'none';
             document.getElementById('heatmapOverlay').style.display = 'none';
-            document.getElementById('weatherWidget').style.display = 'none';
-            document.getElementById('minimap').style.display = 'none';
-            
-            // Set up periodic updates
-            setInterval(() => {
-                updateMinimapPositions();
-                updateWeatherData();
-            }, 15000); // Update every 15 seconds
             
             // Show welcome notification
             setTimeout(() => {
@@ -2019,9 +2072,21 @@
                     e.preventDefault();
                     toggleTimer(); 
                     break;
+                case 'f': case 'F':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleFullscreen();
+                    }
+                    break;
                 case 'Escape': 
-                    closePlayerDatabase();
-                    closeSubstitutions();
+                    // First try to exit fullscreen, then close panels
+                    const body = document.body;
+                    if (body.classList.contains('fullscreen-mode')) {
+                        exitFullscreen();
+                    } else {
+                        closePlayerDatabase();
+                        closeSubstitutions();
+                    }
                     break;
                 // Advanced features shortcuts
                 case 'm': case 'M':
@@ -2036,12 +2101,6 @@
                         toggleHeatmap();
                     }
                     break;
-                case 'n': case 'N':
-                    if (!e.ctrlKey) {
-                        e.preventDefault();
-                        toggleMinimap();
-                    }
-                    break;
                 case 'x': case 'X':
                     if (!e.ctrlKey) {
                         e.preventDefault();
@@ -2052,12 +2111,6 @@
                     if (!e.ctrlKey) {
                         e.preventDefault();
                         toggleMatchEvents();
-                    }
-                    break;
-                case 'b': case 'B':
-                    if (!e.ctrlKey) {
-                        e.preventDefault();
-                        toggleWeather();
                     }
                     break;
                 case '?':
@@ -2538,124 +2591,6 @@
             showNotification('Match simulation started!', 'info');
         }
 
-        function updateMatchStatistics() {
-            const stats = {
-                possession: Math.floor(Math.random() * 20) + 40,
-                shots: Math.floor(Math.random() * 10) + 5,
-                corners: Math.floor(Math.random() * 8) + 2,
-                fouls: Math.floor(Math.random() * 12) + 8,
-                passes: Math.floor(Math.random() * 200) + 350
-            };
-            
-            document.getElementById('possessionHome').textContent = stats.possession + '%';
-            document.getElementById('possessionAway').textContent = (100 - stats.possession) + '%';
-            document.getElementById('shotsHome').textContent = stats.shots;
-            document.getElementById('shotsAway').textContent = Math.floor(Math.random() * 10) + 3;
-            document.getElementById('cornersHome').textContent = stats.corners;
-            document.getElementById('cornersAway').textContent = Math.floor(Math.random() * 6) + 1;
-            document.getElementById('foulsHome').textContent = stats.fouls;
-            document.getElementById('foulsAway').textContent = Math.floor(Math.random() * 12) + 6;
-            document.getElementById('passesHome').textContent = stats.passes;
-            document.getElementById('passesAway').textContent = Math.floor(Math.random() * 250) + 280;
-        }
-
-        function updatePlayerStamina() {
-            const players = document.querySelectorAll('.player');
-            players.forEach(player => {
-                const currentStamina = parseInt(player.dataset.stamina) || 100;
-                const newStamina = Math.max(20, currentStamina - Math.floor(Math.random() * 8) - 2);
-                player.dataset.stamina = newStamina;
-                
-                const staminaFill = player.querySelector('.stamina-fill');
-                if (staminaFill) {
-                    staminaFill.style.width = newStamina + '%';
-                    
-                    // Change color based on stamina level
-                    if (newStamina < 30) {
-                        staminaFill.style.backgroundColor = '#ff4444';
-                    } else if (newStamina < 60) {
-                        staminaFill.style.backgroundColor = '#ffaa00';
-                    } else {
-                        staminaFill.style.backgroundColor = '#4CAF50';
-                    }
-                }
-            });
-        }
-
-        function generateHeatmapData() {
-            const heatmap = document.getElementById('heatmapOverlay');
-            heatmap.innerHTML = '';
-            
-            // Generate random heat zones
-            for (let i = 0; i < 15; i++) {
-                const zone = document.createElement('div');
-                zone.className = 'heat-zone';
-                zone.style.left = Math.random() * 85 + '%';
-                zone.style.top = Math.random() * 85 + '%';
-                zone.style.width = Math.random() * 80 + 40 + 'px';
-                zone.style.height = Math.random() * 60 + 30 + 'px';
-                zone.style.opacity = Math.random() * 0.6 + 0.2;
-                heatmap.appendChild(zone);
-            }
-        }
-
-        function toggleWeather() {
-            const widget = document.getElementById('weatherWidget');
-            widget.style.display = widget.style.display === 'none' ? 'block' : 'none';
-            
-            // Update weather data
-            updateWeatherData();
-        }
-
-        function updateWeatherData() {
-            const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Windy'];
-            const temps = [18, 22, 15, 25];
-            const humidities = [45, 60, 85, 38];
-            const winds = [12, 8, 20, 25];
-            
-            const randomIndex = Math.floor(Math.random() * conditions.length);
-            
-            document.getElementById('weatherCondition').textContent = conditions[randomIndex];
-            document.getElementById('weatherTemp').textContent = temps[randomIndex] + '°C';
-            document.getElementById('weatherHumidity').textContent = humidities[randomIndex] + '%';
-            document.getElementById('weatherWind').textContent = winds[randomIndex] + ' km/h';
-        }
-
-        function toggleMinimap() {
-            const minimap = document.getElementById('minimap');
-            minimap.style.display = minimap.style.display === 'none' ? 'block' : 'none';
-            
-            // Update minimap positions
-            updateMinimapPositions();
-        }
-
-        function updateMinimapPositions() {
-            const minimapField = document.querySelector('.minimap-field');
-            if (!minimapField) return;
-            
-            minimapField.innerHTML = '';
-            
-            const players = document.querySelectorAll('.player');
-            players.forEach(player => {
-                const minimapPlayer = document.createElement('div');
-                minimapPlayer.className = 'minimap-player ' + (player.classList.contains('team-home') ? 'home' : 'away');
-                
-                // Calculate relative position (simplified)
-                const rect = player.getBoundingClientRect();
-                const fieldRect = document.querySelector('.field').getBoundingClientRect();
-                
-                if (fieldRect.width > 0 && fieldRect.height > 0) {
-                    const relativeX = ((rect.left - fieldRect.left) / fieldRect.width) * 100;
-                    const relativeY = ((rect.top - fieldRect.top) / fieldRect.height) * 100;
-                    
-                    minimapPlayer.style.left = Math.max(0, Math.min(95, relativeX)) + '%';
-                    minimapPlayer.style.top = Math.max(0, Math.min(95, relativeY)) + '%';
-                    
-                    minimapField.appendChild(minimapPlayer);
-                }
-            });
-        }
-
         // Enhanced keyboard shortcuts with new features
         document.addEventListener('keydown', function(e) {
             if (e.target.tagName === 'INPUT') return;
@@ -2677,14 +2612,6 @@
                 case 'm':
                     simulateMatch();
                     break;
-                case 'w':
-                    toggleWeather();
-                    showNotification('Weather Widget Toggled', 'info');
-                    break;
-                case 'n':
-                    toggleMinimap();
-                    showNotification('Minimap Toggled', 'info');
-                    break;
             }
         });
         
@@ -2699,6 +2626,7 @@ Q,W,E,R,T - Away Team Formations
 🎯 TACTICAL TOOLS:
 D - Toggle Drawing Mode
 C - Clear Tactical Drawings  
+F - Toggle Fullscreen
 P - Player Database
 S - Substitutions
 G - Show Tactics
@@ -2713,8 +2641,6 @@ V - Toggle Match Events
 X - Toggle Statistics Panel
 H - Toggle Player Heatmap
 M - Simulate Match Events
-B - Toggle Weather Widget
-N - Toggle Tactical Minimap
 
 ❓ HELP:
 ? - Show This Help
@@ -2793,6 +2719,93 @@ ESC - Close Panels
                 }
             };
             document.addEventListener('keydown', escapeHandler);
+        }
+
+        // Additional utility functions for enhanced controls
+        function resetPositions() {
+            const players = document.querySelectorAll('.player');
+            players.forEach(player => {
+                player.style.transform = '';
+                player.style.left = '';
+                player.style.top = '';
+            });
+            showNotification('Player positions reset', 'success');
+        }
+
+        function resetTimer() {
+            document.getElementById('timer').textContent = '45:00';
+            showNotification('Timer reset', 'info');
+        }
+
+        function toggleTimer() {
+            // Timer functionality - placeholder
+            const timer = document.getElementById('timer');
+            if (timer.classList.contains('paused')) {
+                timer.classList.remove('paused');
+                showNotification('Timer started', 'info');
+            } else {
+                timer.classList.add('paused');
+                showNotification('Timer paused', 'info');
+            }
+        }
+
+        function changeScore(team, change) {
+            const scoreElement = document.getElementById('matchScore');
+            const currentScore = scoreElement.textContent.split(' - ');
+            
+            if (team === 'home') {
+                const newScore = Math.max(0, parseInt(currentScore[0]) + change);
+                scoreElement.textContent = newScore + ' - ' + currentScore[1];
+                
+                // Update main scoreboard too
+                document.getElementById('homeScore').textContent = newScore;
+            } else {
+                const newScore = Math.max(0, parseInt(currentScore[1]) + change);
+                scoreElement.textContent = currentScore[0] + ' - ' + newScore;
+                
+                // Update main scoreboard too
+                document.getElementById('awayScore').textContent = newScore;
+            }
+            
+            showNotification(`${team.charAt(0).toUpperCase() + team.slice(1)} score ${change > 0 ? 'increased' : 'decreased'}`, 'info');
+        }
+
+        function showTactics() {
+            showNotification('Tactical analysis feature - coming soon!', 'info');
+        }
+
+        // Removed functions - stub to prevent errors
+        function toggleWeather() {
+            showNotification('Weather feature removed for cleaner experience', 'info');
+        }
+        
+        function toggleMinimap() {
+            showNotification('Minimap feature removed for cleaner experience', 'info');
+        }
+
+        function toggleFullscreen() {
+            const body = document.body;
+            
+            if (body.classList.contains('fullscreen-mode')) {
+                // Exit fullscreen
+                body.classList.remove('fullscreen-mode');
+                body.style.overflow = 'auto';
+                showNotification('Exited fullscreen mode', 'info');
+            } else {
+                // Enter fullscreen
+                body.classList.add('fullscreen-mode');
+                body.style.overflow = 'hidden';
+                showNotification('Entered fullscreen mode - Press F or ESC to exit', 'success');
+            }
+        }
+
+        function exitFullscreen() {
+            const body = document.body;
+            if (body.classList.contains('fullscreen-mode')) {
+                body.classList.remove('fullscreen-mode');
+                body.style.overflow = 'auto';
+                showNotification('Exited fullscreen mode', 'info');
+            }
         }
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984c71aa37928f68',t:'MTc1ODgyMzQ2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
