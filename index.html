@@ -3,13 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Football Field - 4-3-3 Formation</title>
+    <title>Advanced Football Analytics - Tactical Analysis Tool</title>
     <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            --bg-secondary: linear-gradient(135deg, #1f2937, #374151);
+            --field-color: linear-gradient(45deg, #15803d, #22c55e, #16a34a);
+            --text-primary: #ffffff;
+            --text-secondary: #e5e7eb;
+            --border-primary: #60a5fa;
+            --accent-home: linear-gradient(135deg, #dc2626, #ef4444);
+            --accent-away: linear-gradient(135deg, #2563eb, #3b82f6);
+            --accent-action: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            --bg-secondary: linear-gradient(135deg, #1f2937, #374151);
+            --field-color: linear-gradient(45deg, #15803d, #22c55e, #16a34a);
+            --text-primary: #ffffff;
+            --text-secondary: #e5e7eb;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: linear-gradient(135deg, #f8fafc, #e2e8f0, #cbd5e1);
+            --bg-secondary: linear-gradient(135deg, #ffffff, #f1f5f9);
+            --field-color: linear-gradient(45deg, #16a34a, #22c55e, #15803d);
+            --text-primary: #1f2937;
+            --text-secondary: #374151;
+        }
+
         body {
             box-sizing: border-box;
             margin: 0;
             padding: 10px;
-            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            background: var(--bg-primary);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -17,6 +45,7 @@
             min-height: 100vh;
             overflow-x: auto;
             overflow-y: auto;
+            transition: all 0.3s ease;
         }
 
         body::before {
@@ -33,7 +62,7 @@
         }
 
         .field-container {
-            background: linear-gradient(45deg, #15803d, #22c55e, #16a34a);
+            background: var(--field-color);
             border: 6px solid #ffffff;
             border-radius: 16px;
             padding: 30px;
@@ -51,6 +80,134 @@
             background-size: 15px 15px, 15px 15px, 30px 30px, 30px 30px;
             animation: fieldGlow 4s ease-in-out infinite alternate;
             margin: 420px auto 150px auto;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 25px;
+            padding: 8px;
+            display: flex;
+            gap: 5px;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-btn {
+            background: transparent;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .theme-btn.active {
+            background: var(--border-primary);
+            color: #ffffff;
+        }
+
+        /* Tactical Drawing Canvas */
+        .tactical-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .tactical-canvas.drawing {
+            pointer-events: all;
+            cursor: crosshair;
+        }
+
+        /* Enhanced Controls */
+        .controls-panel {
+            position: absolute;
+            top: -380px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--border-primary);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 95%;
+            max-width: 900px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        .control-label {
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .formation-btn, .action-btn {
+            background: var(--accent-action);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            font-size: 11px;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .formation-btn:hover, .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .formation-btn.active {
+            background: var(--accent-home);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Keyboard Shortcut Hints */
+        .shortcut-hint {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8px;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .formation-btn:hover .shortcut-hint,
+        .action-btn:hover .shortcut-hint {
+            opacity: 1;
         }
 
         @keyframes fieldGlow {
@@ -87,69 +244,113 @@
             pointer-events: none;
         }
 
-        /* Interactive controls */
-        .controls-panel {
-            position: absolute;
-            top: -320px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #1f2937, #374151);
-            padding: 15px;
+        /* Player Database Panel */
+        .player-database {
+            position: fixed;
+            top: 50%;
+            left: -400px;
+            transform: translateY(-50%);
+            width: 350px;
+            height: 70vh;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
             border-radius: 15px;
+            padding: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            border: 2px solid #60a5fa;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 95%;
-            max-width: 700px;
+            transition: left 0.3s ease;
+            z-index: 1002;
+            overflow-y: auto;
         }
 
-        .control-group {
+        .player-database.open {
+            left: 20px;
+        }
+
+        .player-database h3 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .player-name {
+            color: var(--text-primary);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .player-position {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin: 4px 0;
+        }
+
+        .player-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .player-rating {
+            background: var(--accent-action);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Enhanced Player Display */
+        .player {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-        }
-
-        .control-label {
+            justify-content: center;
+            font-weight: bold;
+            font-size: 8px;
             color: #ffffff;
-            font-size: 12px;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            cursor: grab;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            animation: playerPulse 3s ease-in-out infinite;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .player-name-display {
+            font-size: 6px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            line-height: 1;
+            text-align: center;
+            margin-top: 1px;
         }
 
-        .formation-btn, .action-btn {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: #ffffff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            font-size: 10px;
-            white-space: nowrap;
-        }
-
-        .formation-btn:hover, .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-        }
-
-        .formation-btn.active {
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-        }
-
-        .score-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        .player-position-display {
+            font-size: 7px;
+            font-weight: 700;
+            line-height: 1;
         }
 
         .score-btn {
@@ -448,13 +649,21 @@
             .field-container {
                 width: 95vw;
                 height: 50vh;
-                margin: 520px auto 150px auto;
+                margin: 580px auto 120px auto;
+                padding: 20px;
             }
             
             .controls-panel {
-                top: -380px;
-                padding: 10px;
+                top: -460px;
+                padding: 15px;
                 gap: 8px;
+                flex-direction: column;
+            }
+            
+            .control-group {
+                flex-direction: row;
+                min-width: auto;
+                gap: 10px;
             }
             
             .scoreboard {
@@ -467,26 +676,320 @@
                 top: 10px;
                 left: 10px;
                 font-size: 10px;
+                padding: 6px 12px;
             }
             
-            .control-group {
-                gap: 4px;
+            .theme-switcher {
+                top: 50px;
+                right: 10px;
+                padding: 6px;
             }
             
             .formation-btn, .action-btn {
-                padding: 4px 8px;
-                font-size: 9px;
+                padding: 6px 12px;
+                font-size: 10px;
             }
             
-            .legend {
-                flex-direction: column;
-                gap: 10px;
-                bottom: -80px;
+            .player {
+                width: 32px;
+                height: 32px;
+                font-size: 7px;
+            }
+            
+            .player-name-display {
+                font-size: 5px;
+            }
+            
+            .player-position-display {
+                font-size: 6px;
+            }
+            
+            .player-database {
+                width: 90vw;
+                height: 60vh;
+                left: -100vw;
+                top: 20%;
+            }
+            
+            .player-database.open {
+                left: 5vw;
             }
             
             .substitution-panel {
-                top: -560px;
-                width: 98%;
+                top: -600px;
+                width: 95%;
+            }
+        }
+
+        /* Advanced Features Styles */
+        .stamina-bar {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .stamina-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #fbbf24, #22c55e);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .match-events {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 15px;
+            padding: 15px;
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease;
+            transform: translateX(320px);
+        }
+
+        .match-events.open {
+            transform: translateX(0);
+        }
+
+        .match-event {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+
+        .event-time {
+            background: var(--accent-action);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-weight: bold;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .heatmap-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .heatmap-overlay.active {
+            opacity: 1;
+        }
+
+        .heat-zone {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.4), rgba(255, 255, 0, 0.2), transparent);
+            animation: heatPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes heatPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .statistics-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 350px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 998;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .statistics-panel.open {
+            transform: translateY(0);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .stat-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .home-stat {
+            background: var(--accent-home);
+        }
+
+        .away-stat {
+            background: var(--accent-away);
+        }
+
+        .player.injured {
+            filter: grayscale(100%) brightness(0.7);
+            position: relative;
+        }
+
+        .player.injured::after {
+            content: '🩹';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 12px;
+        }
+
+        .weather-widget {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1001;
+        }
+
+        .pass-line {
+            stroke: #60a5fa;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0;
+            animation: passAnimation 1s ease-in-out;
+        }
+
+        @keyframes passAnimation {
+            0% { opacity: 0; stroke-dasharray: 0 100; }
+            50% { opacity: 1; stroke-dasharray: 50 50; }
+            100% { opacity: 0; stroke-dasharray: 100 0; }
+        }
+
+        .minimap {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 100px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 10px;
+            z-index: 997;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .minimap:hover {
+            opacity: 1;
+        }
+
+        .mini-player {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .controls-panel {
+                top: -420px;
+                padding: 15px;
+                gap: 10px;
+            }
+            
+            .player-database {
+                width: 300px;
+                left: -320px;
+            }
+            
+            .player-database.open {
+                left: 10px;
+            }
+
+            .match-events {
+                width: 250px;
+                top: 100px;
+            }
+
+            .statistics-panel {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .field-container {
+                margin: 620px auto 100px auto;
+                padding: 15px;
+            }
+            
+            .controls-panel {
+                top: -500px;
+                padding: 12px;
+            }
+            
+            .control-label {
+                font-size: 10px;
+            }
+            
+            .formation-btn, .action-btn {
+                padding: 5px 10px;
+                font-size: 9px;
+            }
+            
+            .player {
+                width: 28px;
+                height: 28px;
+                font-size: 6px;
+            }
+            
+            .theme-switcher {
+                padding: 4px;
+            }
+            
+            .theme-btn {
+                padding: 6px 10px;
+                font-size: 14px;
             }
         }
 
@@ -694,7 +1197,61 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
+    <!-- Weather Widget -->
+    <div class="weather-widget" id="weatherWidget">
+        <span id="weatherIcon">☀️</span>
+        <span id="weatherText">Sunny, 22°C</span>
+        <span>🌬️</span>
+        <span id="windSpeed">12 km/h</span>
+    </div>
+
+    <!-- Match Events Panel -->
+    <div class="match-events" id="matchEvents">
+        <h3 style="color: var(--text-primary); margin-bottom: 15px; text-align: center;">📊 Match Events</h3>
+        <div id="eventsList">
+            <!-- Events will be populated by JavaScript -->
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button class="action-btn" onclick="clearEvents()">Clear Events</button>
+            <button class="action-btn" onclick="closeMatchEvents()">Close (M)</button>
+        </div>
+    </div>
+
+    <!-- Statistics Panel -->
+    <div class="statistics-panel" id="statisticsPanel">
+        <h3 style="color: var(--text-primary); margin-bottom: 15px; text-align: center;">📈 Match Statistics</h3>
+        <div id="statisticsContent">
+            <!-- Statistics will be populated by JavaScript -->
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button class="action-btn" onclick="closeStatistics()">Close (X)</button>
+        </div>
+    </div>
+
+    <!-- Minimap -->
+    <div class="minimap" id="minimap">
+        <div style="position: absolute; top: 5px; left: 5px; color: white; font-size: 10px; font-weight: bold;">Field Overview</div>
+        <!-- Mini players will be populated by JavaScript -->
+    </div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" onclick="setTheme('dark')" title="Dark Theme (Alt+D)">🌙</button>
+        <button class="theme-btn" onclick="setTheme('light')" title="Light Theme (Alt+L)">☀️</button>
+    </div>
+
+    <!-- Player Database Panel -->
+    <div class="player-database" id="playerDatabase">
+        <h3>🏆 Player Database</h3>
+        <div id="playerList">
+            <!-- Players will be populated by JavaScript -->
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="action-btn" onclick="closePlayerDatabase()">Close (Esc)</button>
+        </div>
+    </div>
+
     <div class="field-container">
         <!-- Stadium lights -->
         <div class="stadium-light light-top-left"></div>
@@ -736,19 +1293,43 @@
         <div class="controls-panel">
             <div class="control-group">
                 <div class="control-label">Home Formation</div>
-                <div style="display: flex; gap: 6px;">
-                    <button class="formation-btn home-formation active" onclick="changeFormation('home', '433')">4-3-3</button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '442')">4-4-2</button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '352')">3-5-2</button>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="formation-btn home-formation active" onclick="changeFormation('home', '433')" title="4-3-3">4-3-3
+                        <span class="shortcut-hint">1</span>
+                    </button>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '442')" title="4-4-2">4-4-2
+                        <span class="shortcut-hint">2</span>
+                    </button>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '352')" title="3-5-2">3-5-2
+                        <span class="shortcut-hint">3</span>
+                    </button>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '4231')" title="4-2-3-1">4-2-3-1
+                        <span class="shortcut-hint">4</span>
+                    </button>
+                    <button class="formation-btn home-formation" onclick="changeFormation('home', '532')" title="5-3-2">5-3-2
+                        <span class="shortcut-hint">5</span>
+                    </button>
                 </div>
             </div>
             
             <div class="control-group">
                 <div class="control-label">Away Formation</div>
-                <div style="display: flex; gap: 6px;">
-                    <button class="formation-btn away-formation active" onclick="changeFormation('away', '433')">4-3-3</button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '442')">4-4-2</button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '352')">3-5-2</button>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="formation-btn away-formation active" onclick="changeFormation('away', '433')" title="4-3-3">4-3-3
+                        <span class="shortcut-hint">Q</span>
+                    </button>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '442')" title="4-4-2">4-4-2
+                        <span class="shortcut-hint">W</span>
+                    </button>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '352')" title="3-5-2">3-5-2
+                        <span class="shortcut-hint">E</span>
+                    </button>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '4231')" title="4-2-3-1">4-2-3-1
+                        <span class="shortcut-hint">R</span>
+                    </button>
+                    <button class="formation-btn away-formation" onclick="changeFormation('away', '532')" title="5-3-2">5-3-2
+                        <span class="shortcut-hint">T</span>
+                    </button>
                 </div>
             </div>
             
@@ -760,23 +1341,64 @@
             <div class="control-group">
                 <div class="control-label">Score Control</div>
                 <div class="score-controls">
-                    <button class="score-btn" onclick="changeScore('home', -1)">-</button>
-                    <span style="color: #ffffff; font-weight: bold;">Home</span>
-                    <button class="score-btn" onclick="changeScore('home', 1)">+</button>
-                    <span style="color: #ffffff; margin: 0 10px;">|</span>
-                    <button class="score-btn" onclick="changeScore('away', -1)">-</button>
-                    <span style="color: #ffffff; font-weight: bold;">Away</span>
-                    <button class="score-btn" onclick="changeScore('away', 1)">+</button>
+                    <button class="score-btn" onclick="changeScore('home', -1)" title="Decrease Home Score">-</button>
+                    <span style="color: var(--text-primary); font-weight: bold;">Home</span>
+                    <button class="score-btn" onclick="changeScore('home', 1)" title="Increase Home Score">+</button>
+                    <span style="color: var(--text-primary); margin: 0 10px;">|</span>
+                    <button class="score-btn" onclick="changeScore('away', -1)" title="Decrease Away Score">-</button>
+                    <span style="color: var(--text-primary); font-weight: bold;">Away</span>
+                    <button class="score-btn" onclick="changeScore('away', 1)" title="Increase Away Score">+</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">Tactical Tools</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="action-btn" onclick="toggleDrawingMode()" id="drawBtn" title="Drawing Mode (D)">✏️ Draw
+                        <span class="shortcut-hint">D</span>
+                    </button>
+                    <button class="action-btn" onclick="clearDrawing()" title="Clear Drawing (C)">🗑️ Clear
+                        <span class="shortcut-hint">C</span>
+                    </button>
                 </div>
             </div>
             
             <div class="control-group">
                 <div class="control-label">Actions</div>
-                <div style="display: flex; gap: 6px;">
-                    <button class="action-btn" onclick="resetPositions()">Reset</button>
-                    <button class="action-btn" onclick="toggleTimer()">Start/Stop</button>
-                    <button class="action-btn" onclick="showTactics()">Tactics</button>
-                    <button class="action-btn" onclick="toggleSubstitutions()">Subs</button>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="action-btn" onclick="resetPositions()" title="Reset Positions (R)">🔄 Reset
+                        <span class="shortcut-hint">R</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleTimer()" title="Start/Stop Timer (Space)">⏯️ Timer
+                        <span class="shortcut-hint">Space</span>
+                    </button>
+                    <button class="action-btn" onclick="showTactics()" title="Show Tactics (T)">📋 Tactics
+                        <span class="shortcut-hint">G</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleSubstitutions()" title="Substitutions (S)">🔄 Subs
+                        <span class="shortcut-hint">S</span>
+                    </button>
+                    <button class="action-btn" onclick="togglePlayerDatabase()" title="Player Database (P)">👥 Players
+                        <span class="shortcut-hint">P</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">Analytics</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="action-btn" onclick="toggleMatchEvents()" title="Match Events (M)">📊 Events
+                        <span class="shortcut-hint">M</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleStatistics()" title="Statistics (X)">📈 Stats
+                        <span class="shortcut-hint">X</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleHeatmap()" title="Heatmap (H)">🔥 Heatmap
+                        <span class="shortcut-hint">H</span>
+                    </button>
+                    <button class="action-btn" onclick="simulateMatch()" title="Auto Simulate (A)">⚡ Simulate
+                        <span class="shortcut-hint">A</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -795,6 +1417,16 @@
         <div class="formation-label" id="formationLabel">Home: 4-3-3 | Away: 4-3-3</div>
         
         <div class="field" id="field">
+            <!-- Heatmap Overlay -->
+            <div class="heatmap-overlay" id="heatmapOverlay">
+                <!-- Heat zones will be populated by JavaScript -->
+            </div>
+            
+            <!-- Tactical Drawing Canvas -->
+            <svg class="tactical-canvas" id="tacticalCanvas" width="100%" height="100%">
+                <!-- Drawing elements will be added here -->
+            </svg>
+            
             <!-- Formation overlay -->
             <div class="formation-overlay" id="formationOverlay">
                 <div class="formation-line" style="top: 20%;"></div>
@@ -816,31 +1448,119 @@
             <div class="penalty-spot left"></div>
             <div class="penalty-spot right"></div>
             
-            <!-- Home team (Red) - 4-3-3 formation -->
-            <div class="player team-home" data-position="GK" data-team="home" style="left: 30px; top: 50%; transform: translateY(-50%);">GK</div>
-            <div class="player team-home" data-position="RB" data-team="home" style="left: 120px; top: 20%;">RB</div>
-            <div class="player team-home" data-position="CB" data-team="home" style="left: 120px; top: 38%;">CB</div>
-            <div class="player team-home" data-position="CB" data-team="home" style="left: 120px; top: 62%;">CB</div>
-            <div class="player team-home" data-position="LB" data-team="home" style="left: 120px; top: 80%;">LB</div>
-            <div class="player team-home" data-position="CM" data-team="home" style="left: 240px; top: 30%;">CM</div>
-            <div class="player team-home" data-position="CM" data-team="home" style="left: 240px; top: 50%; transform: translateY(-50%);">CM</div>
-            <div class="player team-home" data-position="CM" data-team="home" style="left: 240px; top: 70%;">CM</div>
-            <div class="player team-home" data-position="RW" data-team="home" style="left: 360px; top: 25%;">RW</div>
-            <div class="player team-home" data-position="ST" data-team="home" style="left: 360px; top: 50%; transform: translateY(-50%);">ST</div>
-            <div class="player team-home" data-position="LW" data-team="home" style="left: 360px; top: 75%;">LW</div>
+            <!-- Home team (Red) - 4-3-3 formation with enhanced features -->
+            <div class="player team-home" data-position="GK" data-team="home" data-player-id="1" data-stamina="100" style="left: 30px; top: 50%; transform: translateY(-50%);">
+                <div class="player-position-display">GK</div>
+                <div class="player-name-display">Neuer</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 100%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="RB" data-team="home" data-player-id="2" data-stamina="95" style="left: 120px; top: 20%;">
+                <div class="player-position-display">RB</div>
+                <div class="player-name-display">Walker</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 95%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="CB" data-team="home" data-player-id="3" data-stamina="88" style="left: 120px; top: 38%;">
+                <div class="player-position-display">CB</div>
+                <div class="player-name-display">Ramos</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 88%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="CB" data-team="home" data-player-id="4" data-stamina="92" style="left: 120px; top: 62%;">
+                <div class="player-position-display">CB</div>
+                <div class="player-name-display">Silva</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 92%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="LB" data-team="home" data-player-id="5" data-stamina="85" style="left: 120px; top: 80%;">
+                <div class="player-position-display">LB</div>
+                <div class="player-name-display">Davies</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="CM" data-team="home" data-player-id="6" data-stamina="78" style="left: 240px; top: 30%;">
+                <div class="player-position-display">CM</div>
+                <div class="player-name-display">Modrić</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 78%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="CM" data-team="home" data-player-id="7" data-stamina="82" style="left: 240px; top: 50%; transform: translateY(-50%);">
+                <div class="player-position-display">CM</div>
+                <div class="player-name-display">De Jong</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 82%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="CM" data-team="home" data-player-id="8" data-stamina="75" style="left: 240px; top: 70%;">
+                <div class="player-position-display">CM</div>
+                <div class="player-name-display">Kroos</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="RW" data-team="home" data-player-id="9" data-stamina="73" style="left: 360px; top: 25%;">
+                <div class="player-position-display">RW</div>
+                <div class="player-name-display">Salah</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 73%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="ST" data-team="home" data-player-id="10" data-stamina="90" style="left: 360px; top: 50%; transform: translateY(-50%);">
+                <div class="player-position-display">ST</div>
+                <div class="player-name-display">Haaland</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 90%;"></div></div>
+            </div>
+            <div class="player team-home" data-position="LW" data-team="home" data-player-id="11" data-stamina="68" style="left: 360px; top: 75%;">
+                <div class="player-position-display">LW</div>
+                <div class="player-name-display">Vinicius</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 68%;"></div></div>
+            </div>
             
-            <!-- Away team (Blue) - 4-3-3 formation -->
-            <div class="player team-away" data-position="GK" data-team="away" style="right: 30px; top: 50%; transform: translateY(-50%);">GK</div>
-            <div class="player team-away" data-position="LB" data-team="away" style="right: 120px; top: 20%;">LB</div>
-            <div class="player team-away" data-position="CB" data-team="away" style="right: 120px; top: 38%;">CB</div>
-            <div class="player team-away" data-position="CB" data-team="away" style="right: 120px; top: 62%;">CB</div>
-            <div class="player team-away" data-position="RB" data-team="away" style="right: 120px; top: 80%;">RB</div>
-            <div class="player team-away" data-position="CM" data-team="away" style="right: 240px; top: 30%;">CM</div>
-            <div class="player team-away" data-position="CM" data-team="away" style="right: 240px; top: 50%; transform: translateY(-50%);">CM</div>
-            <div class="player team-away" data-position="CM" data-team="away" style="right: 240px; top: 70%;">CM</div>
-            <div class="player team-away" data-position="LW" data-team="away" style="right: 360px; top: 25%;">LW</div>
-            <div class="player team-away" data-position="ST" data-team="away" style="right: 360px; top: 50%; transform: translateY(-50%);">ST</div>
-            <div class="player team-away" data-position="RW" data-team="away" style="right: 360px; top: 75%;">RW</div>
+            <!-- Away team (Blue) - 4-3-3 formation with enhanced features -->
+            <div class="player team-away" data-position="GK" data-team="away" data-player-id="12" data-stamina="94" style="right: 30px; top: 50%; transform: translateY(-50%);">
+                <div class="player-position-display">GK</div>
+                <div class="player-name-display">Alisson</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 94%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="LB" data-team="away" data-player-id="13" data-stamina="87" style="right: 120px; top: 20%;">
+                <div class="player-position-display">LB</div>
+                <div class="player-name-display">Robertson</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 87%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="CB" data-team="away" data-player-id="14" data-stamina="91" style="right: 120px; top: 38%;">
+                <div class="player-position-display">CB</div>
+                <div class="player-name-display">van Dijk</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 91%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="CB" data-team="away" data-player-id="15" data-stamina="86" style="right: 120px; top: 62%;">
+                <div class="player-position-display">CB</div>
+                <div class="player-name-display">Marquinhos</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 86%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="RB" data-team="away" data-player-id="16" data-stamina="79" style="right: 120px; top: 80%;">
+                <div class="player-position-display">RB</div>
+                <div class="player-name-display">Hakimi</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 79%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="CM" data-team="away" data-player-id="17" data-stamina="93" style="right: 240px; top: 30%;">
+                <div class="player-position-display">CM</div>
+                <div class="player-name-display">Bellingham</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 93%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="CM" data-team="away" data-player-id="18" data-stamina="84" style="right: 240px; top: 50%; transform: translateY(-50%);">
+                <div class="player-position-display">CM</div>
+                <div class="player-name-display">Pedri</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 84%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="CM" data-team="away" data-player-id="19" data-stamina="77" style="right: 240px; top: 70%;">
+                <div class="player-position-display">CM</div>
+                <div class="player-name-display">Casemiro</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 77%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="LW" data-team="away" data-player-id="20" data-stamina="71" style="right: 360px; top: 25%;">
+                <div class="player-position-display">LW</div>
+                <div class="player-name-display">Neymar</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 71%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="ST" data-team="away" data-player-id="21" data-stamina="89" style="right: 360px; top: 50%; transform: translateY(-50%);">
+                <div class="player-position-display">ST</div>
+                <div class="player-name-display">Mbappé</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 89%;"></div></div>
+            </div>
+            <div class="player team-away" data-position="RW" data-team="away" data-player-id="22" data-stamina="65" style="right: 360px; top: 75%;">
+                <div class="player-position-display">RW</div>
+                <div class="player-name-display">Messi</div>
+                <div class="stamina-bar"><div class="stamina-fill" style="width: 65%;"></div></div>
+            </div>
         </div>
         
         <div class="legend">
@@ -871,8 +1591,57 @@
         let awayFormation = '433';
         let selectedFieldPlayer = null;
         let selectedSubPlayer = null;
+        let isDrawingMode = false;
+        let isDrawing = false;
+        let currentPath = null;
 
-        // Formation configurations
+        // Player Database
+        const playerDatabase = {
+            home: [
+                { id: 1, name: 'Neuer', position: 'GK', rating: 90, pace: 45, shooting: 15, passing: 70, defending: 50, physicality: 85 },
+                { id: 2, name: 'Walker', position: 'RB', rating: 85, pace: 92, shooting: 55, passing: 72, defending: 82, physicality: 88 },
+                { id: 3, name: 'Ramos', position: 'CB', rating: 87, pace: 65, shooting: 45, passing: 78, defending: 92, physicality: 90 },
+                { id: 4, name: 'Silva', position: 'CB', rating: 84, pace: 55, shooting: 35, passing: 85, defending: 88, physicality: 75 },
+                { id: 5, name: 'Davies', position: 'LB', rating: 86, pace: 96, shooting: 60, passing: 80, defending: 78, physicality: 82 },
+                { id: 6, name: 'Modrić', position: 'CM', rating: 88, pace: 70, shooting: 75, passing: 95, defending: 65, physicality: 68 },
+                { id: 7, name: 'De Jong', position: 'CM', rating: 87, pace: 78, shooting: 70, passing: 90, defending: 75, physicality: 82 },
+                { id: 8, name: 'Kroos', position: 'CM', rating: 86, pace: 60, shooting: 80, passing: 95, defending: 70, physicality: 75 },
+                { id: 9, name: 'Salah', position: 'RW', rating: 90, pace: 95, shooting: 87, passing: 82, defending: 45, physicality: 75 },
+                { id: 10, name: 'Haaland', position: 'ST', rating: 91, pace: 89, shooting: 94, passing: 65, defending: 45, physicality: 95 },
+                { id: 11, name: 'Vinicius', position: 'LW', rating: 88, pace: 95, shooting: 82, passing: 78, defending: 35, physicality: 68 }
+            ],
+            away: [
+                { id: 12, name: 'Alisson', position: 'GK', rating: 89, pace: 50, shooting: 20, passing: 75, defending: 55, physicality: 85 },
+                { id: 13, name: 'Robertson', position: 'LB', rating: 85, pace: 88, shooting: 58, passing: 82, defending: 80, physicality: 78 },
+                { id: 14, name: 'van Dijk', position: 'CB', rating: 90, pace: 75, shooting: 40, passing: 82, defending: 95, physicality: 92 },
+                { id: 15, name: 'Marquinhos', position: 'CB', rating: 86, pace: 78, shooting: 45, passing: 80, defending: 90, physicality: 85 },
+                { id: 16, name: 'Hakimi', position: 'RB', rating: 84, pace: 94, shooting: 65, passing: 78, defending: 75, physicality: 80 },
+                { id: 17, name: 'Bellingham', position: 'CM', rating: 87, pace: 82, shooting: 78, passing: 85, defending: 72, physicality: 88 },
+                { id: 18, name: 'Pedri', position: 'CM', rating: 85, pace: 75, shooting: 70, passing: 92, defending: 65, physicality: 70 },
+                { id: 19, name: 'Casemiro', position: 'CM', rating: 84, pace: 60, shooting: 65, passing: 78, defending: 88, physicality: 92 },
+                { id: 20, name: 'Neymar', position: 'LW', rating: 89, pace: 87, shooting: 83, passing: 90, defending: 38, physicality: 65 },
+                { id: 21, name: 'Mbappé', position: 'ST', rating: 92, pace: 97, shooting: 89, passing: 80, defending: 40, physicality: 78 },
+                { id: 22, name: 'Messi', position: 'RW', rating: 91, pace: 80, shooting: 88, passing: 95, defending: 38, physicality: 68 }
+            ],
+            substitutes: {
+                home: [
+                    { name: 'Martinez', position: 'GK', rating: 78 },
+                    { name: 'Johnson', position: 'CB', rating: 75 },
+                    { name: 'Silva', position: 'CM', rating: 80 },
+                    { name: 'Rodriguez', position: 'ST', rating: 82 },
+                    { name: 'Williams', position: 'LW', rating: 77 }
+                ],
+                away: [
+                    { name: 'Anderson', position: 'GK', rating: 76 },
+                    { name: 'Brown', position: 'CB', rating: 74 },
+                    { name: 'Davis', position: 'CM', rating: 79 },
+                    { name: 'Wilson', position: 'ST', rating: 81 },
+                    { name: 'Taylor', position: 'RW', rating: 76 }
+                ]
+            }
+        };
+
+        // Enhanced Formation configurations
         const formations = {
             '433': {
                 home: [
@@ -957,10 +1726,66 @@
                     { pos: 'ST', right: '340px', top: '40%' },
                     { pos: 'ST', right: '340px', top: '60%' }
                 ]
+            },
+            '4231': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'CDM', left: '200px', top: '40%' },
+                    { pos: 'CDM', left: '200px', top: '60%' },
+                    { pos: 'CAM', left: '280px', top: '20%' },
+                    { pos: 'CAM', left: '280px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CAM', left: '280px', top: '80%' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'CDM', right: '200px', top: '40%' },
+                    { pos: 'CDM', right: '200px', top: '60%' },
+                    { pos: 'CAM', right: '280px', top: '20%' },
+                    { pos: 'CAM', right: '280px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CAM', right: '280px', top: '80%' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            '532': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'CB', left: '120px', top: '80%' },
+                    { pos: 'CM', left: '240px', top: '35%' },
+                    { pos: 'CM', left: '240px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '240px', top: '65%' },
+                    { pos: 'ST', left: '340px', top: '40%' },
+                    { pos: 'ST', left: '340px', top: '60%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'CB', right: '120px', top: '80%' },
+                    { pos: 'CM', right: '240px', top: '35%' },
+                    { pos: 'CM', right: '240px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '240px', top: '65%' },
+                    { pos: 'ST', right: '340px', top: '40%' },
+                    { pos: 'ST', right: '340px', top: '60%' }
+                ]
             }
         };
 
-        // Initialize drag and drop
+        // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
             const players = document.querySelectorAll('.player');
             
@@ -977,9 +1802,305 @@
                 player.addEventListener('click', selectSubPlayer);
             });
 
+            // Initialize tactical canvas
+            const canvas = document.getElementById('tacticalCanvas');
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+
             document.addEventListener('mousemove', drag);
             document.addEventListener('mouseup', stopDrag);
+            
+            // Initialize keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+            
+            // Populate player database
+            populatePlayerDatabase();
+            
+            // Set initial theme (restore from localStorage or default to dark)
+            const savedTheme = localStorage.getItem('footballAnalyticsTheme') || 'dark';
+            setTheme(savedTheme);
+            
+            // Initialize advanced features
+            updateWeatherData();
+            updateMatchStatistics();
+            
+            // Hide all advanced panels initially
+            document.getElementById('matchEvents').style.display = 'none';
+            document.getElementById('statisticsPanel').style.display = 'none';
+            document.getElementById('heatmapOverlay').style.display = 'none';
+            document.getElementById('weatherWidget').style.display = 'none';
+            document.getElementById('minimap').style.display = 'none';
+            
+            // Set up periodic updates
+            setInterval(() => {
+                updateMinimapPositions();
+                updateWeatherData();
+            }, 15000); // Update every 15 seconds
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('⚽ Football Analytics Pro - Ready! Press ? for shortcuts', 'success');
+            }, 1500);
         });
+
+        // Theme Management
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            event?.target.classList.add('active') || document.querySelector(`[onclick="setTheme('${theme}')"]`).classList.add('active');
+            localStorage.setItem('footballAnalyticsTheme', theme);
+        }
+
+        // Player Database Functions
+        function populatePlayerDatabase() {
+            const playerList = document.getElementById('playerList');
+            let html = '<div style="margin-bottom: 20px;"><h4 style="color: var(--text-primary); margin-bottom: 10px;">🔴 Home Team</h4>';
+            
+            playerDatabase.home.forEach(player => {
+                html += `
+                    <div class="player-card" onclick="selectDatabasePlayer(${player.id}, 'home')">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-position">${player.position} - <span class="player-rating">${player.rating}</span></div>
+                        <div class="player-stats">
+                            <span>PAC: ${player.pace}</span>
+                            <span>SHO: ${player.shooting}</span>
+                            <span>PAS: ${player.passing}</span>
+                            <span>DEF: ${player.defending}</span>
+                            <span>PHY: ${player.physicality}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div><div><h4 style="color: var(--text-primary); margin-bottom: 10px;">🔵 Away Team</h4>';
+            
+            playerDatabase.away.forEach(player => {
+                html += `
+                    <div class="player-card" onclick="selectDatabasePlayer(${player.id}, 'away')">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-position">${player.position} - <span class="player-rating">${player.rating}</span></div>
+                        <div class="player-stats">
+                            <span>PAC: ${player.pace}</span>
+                            <span>SHO: ${player.shooting}</span>
+                            <span>PAS: ${player.passing}</span>
+                            <span>DEF: ${player.defending}</span>
+                            <span>PHY: ${player.physicality}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            playerList.innerHTML = html;
+        }
+
+        function selectDatabasePlayer(playerId, team) {
+            const players = team === 'home' ? playerDatabase.home : playerDatabase.away;
+            const player = players.find(p => p.id === playerId);
+            
+            showNotification(`Selected ${player.name} (${player.position}) - Rating: ${player.rating}`, 'info');
+        }
+
+        function togglePlayerDatabase() {
+            const database = document.getElementById('playerDatabase');
+            database.classList.toggle('open');
+        }
+
+        function closePlayerDatabase() {
+            document.getElementById('playerDatabase').classList.remove('open');
+        }
+
+        // Tactical Drawing Functions
+        function toggleDrawingMode() {
+            isDrawingMode = !isDrawingMode;
+            const canvas = document.getElementById('tacticalCanvas');
+            const drawBtn = document.getElementById('drawBtn');
+            
+            if (isDrawingMode) {
+                canvas.classList.add('drawing');
+                drawBtn.style.background = 'var(--accent-home)';
+                drawBtn.innerHTML = '✏️ Drawing ON<span class="shortcut-hint">D</span>';
+                showNotification('Drawing mode enabled! Click and drag to draw tactical lines.', 'info');
+            } else {
+                canvas.classList.remove('drawing');
+                drawBtn.style.background = 'var(--accent-action)';
+                drawBtn.innerHTML = '✏️ Draw<span class="shortcut-hint">D</span>';
+                showNotification('Drawing mode disabled.', 'info');
+            }
+        }
+
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isDrawing = true;
+            const rect = e.target.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            currentPath.setAttribute('stroke', '#ffff00');
+            currentPath.setAttribute('stroke-width', '3');
+            currentPath.setAttribute('fill', 'none');
+            currentPath.setAttribute('stroke-linecap', 'round');
+            currentPath.setAttribute('d', `M ${x} ${y}`);
+            document.getElementById('tacticalCanvas').appendChild(currentPath);
+        }
+
+        function draw(e) {
+            if (!isDrawingMode || !isDrawing || !currentPath) return;
+            const rect = e.target.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const d = currentPath.getAttribute('d');
+            currentPath.setAttribute('d', d + ` L ${x} ${y}`);
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            currentPath = null;
+        }
+
+        function clearDrawing() {
+            const canvas = document.getElementById('tacticalCanvas');
+            while (canvas.firstChild) {
+                canvas.removeChild(canvas.firstChild);
+            }
+            showNotification('Tactical drawings cleared!', 'success');
+        }
+
+        // Keyboard Shortcuts
+        function handleKeyboardShortcuts(e) {
+            // Prevent shortcuts when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key) {
+                case '1': if (!e.shiftKey) changeFormation('home', '433'); break;
+                case '2': if (!e.shiftKey) changeFormation('home', '442'); break;
+                case '3': if (!e.shiftKey) changeFormation('home', '352'); break;
+                case '4': if (!e.shiftKey) changeFormation('home', '4231'); break;
+                case '5': if (!e.shiftKey) changeFormation('home', '532'); break;
+                case 'q': case 'Q': changeFormation('away', '433'); break;
+                case 'w': case 'W': changeFormation('away', '442'); break;
+                case 'e': case 'E': changeFormation('away', '352'); break;
+                case 'r': case 'R': 
+                    if (e.ctrlKey) return; // Allow Ctrl+R for refresh
+                    changeFormation('away', '4231'); 
+                    break;
+                case 't': case 'T': changeFormation('away', '532'); break;
+                case 'd': case 'D': 
+                    e.preventDefault();
+                    if (e.altKey) setTheme('dark');
+                    else toggleDrawingMode();
+                    break;
+                case 'l': case 'L': 
+                    if (e.altKey) {
+                        e.preventDefault();
+                        setTheme('light');
+                    }
+                    break;
+                case 'c': case 'C': 
+                    if (!e.ctrlKey) clearDrawing(); 
+                    break;
+                case 'g': case 'G': showTactics(); break;
+                case 's': case 'S': 
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleSubstitutions();
+                    }
+                    break;
+                case 'p': case 'P': 
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        togglePlayerDatabase();
+                    }
+                    break;
+                case ' ': 
+                    e.preventDefault();
+                    toggleTimer(); 
+                    break;
+                case 'Escape': 
+                    closePlayerDatabase();
+                    closeSubstitutions();
+                    break;
+                // Advanced features shortcuts
+                case 'm': case 'M':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        simulateMatch();
+                    }
+                    break;
+                case 'h': case 'H':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleHeatmap();
+                    }
+                    break;
+                case 'n': case 'N':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleMinimap();
+                    }
+                    break;
+                case 'x': case 'X':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleStatistics();
+                    }
+                    break;
+                case 'v': case 'V':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleMatchEvents();
+                    }
+                    break;
+                case 'b': case 'B':
+                    if (!e.ctrlKey) {
+                        e.preventDefault();
+                        toggleWeather();
+                    }
+                    break;
+                case '?':
+                    e.preventDefault();
+                    showKeyboardShortcutsHelp();
+                    break;
+            }
+        }
+
+        // Enhanced notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                info: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                success: 'linear-gradient(135deg, #059669, #10b981)',
+                error: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                warning: 'linear-gradient(135deg, #d97706, #f59e0b)'
+            };
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 12px;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
 
         function startDrag(e) {
             isDragging = true;
@@ -1211,6 +2332,467 @@
                 notification.style.animation = 'slideOut 0.3s ease-in forwards';
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
+        }
+
+        // Enhanced existing functions
+        function changeScore(team, delta) {
+            if (team === 'home') {
+                homeScore = Math.max(0, homeScore + delta);
+                document.getElementById('homeScore').textContent = homeScore;
+            } else {
+                awayScore = Math.max(0, awayScore + delta);
+                document.getElementById('awayScore').textContent = awayScore;
+            }
+            showNotification(`${team.toUpperCase()} score: ${team === 'home' ? homeScore : awayScore}`, 'info');
+        }
+
+        function resetPositions() {
+            changeFormation('home', homeFormation);
+            changeFormation('away', awayFormation);
+            showNotification('Player positions reset to formation defaults!', 'success');
+        }
+
+        function toggleTimer() {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                showNotification('Timer stopped ⏸️', 'info');
+            } else {
+                timerInterval = setInterval(() => {
+                    currentTime++;
+                    const minutes = Math.floor(currentTime / 60);
+                    const seconds = currentTime % 60;
+                    document.getElementById('timer').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+                timerRunning = true;
+                showNotification('Timer started ▶️', 'success');
+            }
+        }
+
+        function showTactics() {
+            const overlay = document.getElementById('formationOverlay');
+            overlay.classList.toggle('active');
+            showNotification('Tactical lines displayed for 3 seconds', 'info');
+            
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 3000);
+        }
+
+        function toggleSubstitutions() {
+            const panel = document.getElementById('substitutionPanel');
+            panel.classList.toggle('active');
+        }
+
+        function closeSubstitutions() {
+            const panel = document.getElementById('substitutionPanel');
+            panel.classList.remove('active');
+            selectedFieldPlayer = null;
+            selectedSubPlayer = null;
+            updateSubstitutionUI();
+        }
+
+        function selectFieldPlayer(e) {
+            if (e.target.classList.contains('dragging')) return;
+            
+            document.querySelectorAll('.player').forEach(p => p.classList.remove('selected'));
+            selectedFieldPlayer = e.target;
+            e.target.classList.add('selected');
+            updateSubstitutionUI();
+        }
+
+        function selectSubPlayer(e) {
+            document.querySelectorAll('.sub-player').forEach(p => p.classList.remove('selected'));
+            selectedSubPlayer = e.target;
+            e.target.classList.add('selected');
+            updateSubstitutionUI();
+        }
+
+        function updateSubstitutionUI() {
+            const makeSubBtn = document.getElementById('makeSubBtn');
+            makeSubBtn.disabled = !(selectedFieldPlayer && selectedSubPlayer && 
+                selectedFieldPlayer.dataset.team === (selectedSubPlayer.classList.contains('home') ? 'home' : 'away'));
+        }
+
+        function makeSubstitution() {
+            if (!selectedFieldPlayer || !selectedSubPlayer) return;
+            
+            const fieldPlayerTeam = selectedFieldPlayer.dataset.team;
+            const subPlayerTeam = selectedSubPlayer.classList.contains('home') ? 'home' : 'away';
+            
+            if (fieldPlayerTeam !== subPlayerTeam) return;
+            
+            const subPlayerName = selectedSubPlayer.dataset.name;
+            const subPlayerPosition = selectedSubPlayer.dataset.position;
+            
+            const nameDisplay = selectedFieldPlayer.querySelector('.player-name-display');
+            const positionDisplay = selectedFieldPlayer.querySelector('.player-position-display');
+            
+            if (nameDisplay) nameDisplay.textContent = subPlayerName;
+            if (positionDisplay) positionDisplay.textContent = subPlayerPosition;
+            
+            selectedFieldPlayer.dataset.position = subPlayerPosition;
+            selectedSubPlayer.remove();
+            
+            selectedFieldPlayer.classList.remove('selected');
+            selectedFieldPlayer = null;
+            selectedSubPlayer = null;
+            
+            updateSubstitutionUI();
+            showNotification(`🔄 ${subPlayerName} (${subPlayerPosition}) substituted in for ${fieldPlayerTeam.toUpperCase()} team`, 'success');
+        }
+
+        function startDrag(e) {
+            isDragging = true;
+            dragElement = e.target;
+            dragElement.classList.add('dragging');
+            
+            const rect = dragElement.getBoundingClientRect();
+            const fieldRect = document.getElementById('field').getBoundingClientRect();
+            
+            offset.x = e.clientX - rect.left;
+            offset.y = e.clientY - rect.top;
+            
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!isDragging || !dragElement) return;
+            
+            const fieldRect = document.getElementById('field').getBoundingClientRect();
+            const x = e.clientX - fieldRect.left - offset.x;
+            const y = e.clientY - fieldRect.top - offset.y;
+            
+            const maxX = fieldRect.width - 36;
+            const maxY = fieldRect.height - 36;
+            
+            const boundedX = Math.max(0, Math.min(x, maxX));
+            const boundedY = Math.max(0, Math.min(y, maxY));
+            
+            dragElement.style.left = boundedX + 'px';
+            dragElement.style.top = boundedY + 'px';
+            dragElement.style.transform = 'none';
+        }
+
+        function stopDrag() {
+            if (dragElement) {
+                dragElement.classList.remove('dragging');
+                dragElement = null;
+            }
+            isDragging = false;
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('show');
+        }
+
+        // Advanced Features Functions
+        function toggleMatchEvents() {
+            const panel = document.getElementById('matchEvents');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleStatistics() {
+            const panel = document.getElementById('statisticsPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleHeatmap() {
+            const overlay = document.getElementById('heatmapOverlay');
+            overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
+            
+            // Generate random heatmap data
+            generateHeatmapData();
+        }
+
+        function simulateMatch() {
+            // Generate random match events
+            const events = [
+                "Goal! Haaland scores from close range! (15')",
+                "Yellow card for Pedri for a tactical foul (23')",
+                "Substitution: Neymar replaced by Vinicius Jr (45')",
+                "Goal! Messi with a brilliant free kick! (67')",
+                "Red card! Casemiro sent off for a second yellow (78')",
+                "Corner kick leads to a goal! van Dijk header! (85')"
+            ];
+            
+            const eventsList = document.getElementById('matchEventsList');
+            eventsList.innerHTML = '';
+            
+            events.forEach((event, index) => {
+                setTimeout(() => {
+                    const eventElement = document.createElement('div');
+                    eventElement.className = 'match-event';
+                    eventElement.textContent = event;
+                    eventsList.appendChild(eventElement);
+                    
+                    // Update statistics
+                    updateMatchStatistics();
+                    
+                    // Update stamina
+                    updatePlayerStamina();
+                }, index * 1500);
+            });
+            
+            showNotification('Match simulation started!', 'info');
+        }
+
+        function updateMatchStatistics() {
+            const stats = {
+                possession: Math.floor(Math.random() * 20) + 40,
+                shots: Math.floor(Math.random() * 10) + 5,
+                corners: Math.floor(Math.random() * 8) + 2,
+                fouls: Math.floor(Math.random() * 12) + 8,
+                passes: Math.floor(Math.random() * 200) + 350
+            };
+            
+            document.getElementById('possessionHome').textContent = stats.possession + '%';
+            document.getElementById('possessionAway').textContent = (100 - stats.possession) + '%';
+            document.getElementById('shotsHome').textContent = stats.shots;
+            document.getElementById('shotsAway').textContent = Math.floor(Math.random() * 10) + 3;
+            document.getElementById('cornersHome').textContent = stats.corners;
+            document.getElementById('cornersAway').textContent = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('foulsHome').textContent = stats.fouls;
+            document.getElementById('foulsAway').textContent = Math.floor(Math.random() * 12) + 6;
+            document.getElementById('passesHome').textContent = stats.passes;
+            document.getElementById('passesAway').textContent = Math.floor(Math.random() * 250) + 280;
+        }
+
+        function updatePlayerStamina() {
+            const players = document.querySelectorAll('.player');
+            players.forEach(player => {
+                const currentStamina = parseInt(player.dataset.stamina) || 100;
+                const newStamina = Math.max(20, currentStamina - Math.floor(Math.random() * 8) - 2);
+                player.dataset.stamina = newStamina;
+                
+                const staminaFill = player.querySelector('.stamina-fill');
+                if (staminaFill) {
+                    staminaFill.style.width = newStamina + '%';
+                    
+                    // Change color based on stamina level
+                    if (newStamina < 30) {
+                        staminaFill.style.backgroundColor = '#ff4444';
+                    } else if (newStamina < 60) {
+                        staminaFill.style.backgroundColor = '#ffaa00';
+                    } else {
+                        staminaFill.style.backgroundColor = '#4CAF50';
+                    }
+                }
+            });
+        }
+
+        function generateHeatmapData() {
+            const heatmap = document.getElementById('heatmapOverlay');
+            heatmap.innerHTML = '';
+            
+            // Generate random heat zones
+            for (let i = 0; i < 15; i++) {
+                const zone = document.createElement('div');
+                zone.className = 'heat-zone';
+                zone.style.left = Math.random() * 85 + '%';
+                zone.style.top = Math.random() * 85 + '%';
+                zone.style.width = Math.random() * 80 + 40 + 'px';
+                zone.style.height = Math.random() * 60 + 30 + 'px';
+                zone.style.opacity = Math.random() * 0.6 + 0.2;
+                heatmap.appendChild(zone);
+            }
+        }
+
+        function toggleWeather() {
+            const widget = document.getElementById('weatherWidget');
+            widget.style.display = widget.style.display === 'none' ? 'block' : 'none';
+            
+            // Update weather data
+            updateWeatherData();
+        }
+
+        function updateWeatherData() {
+            const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Windy'];
+            const temps = [18, 22, 15, 25];
+            const humidities = [45, 60, 85, 38];
+            const winds = [12, 8, 20, 25];
+            
+            const randomIndex = Math.floor(Math.random() * conditions.length);
+            
+            document.getElementById('weatherCondition').textContent = conditions[randomIndex];
+            document.getElementById('weatherTemp').textContent = temps[randomIndex] + '°C';
+            document.getElementById('weatherHumidity').textContent = humidities[randomIndex] + '%';
+            document.getElementById('weatherWind').textContent = winds[randomIndex] + ' km/h';
+        }
+
+        function toggleMinimap() {
+            const minimap = document.getElementById('minimap');
+            minimap.style.display = minimap.style.display === 'none' ? 'block' : 'none';
+            
+            // Update minimap positions
+            updateMinimapPositions();
+        }
+
+        function updateMinimapPositions() {
+            const minimapField = document.querySelector('.minimap-field');
+            if (!minimapField) return;
+            
+            minimapField.innerHTML = '';
+            
+            const players = document.querySelectorAll('.player');
+            players.forEach(player => {
+                const minimapPlayer = document.createElement('div');
+                minimapPlayer.className = 'minimap-player ' + (player.classList.contains('team-home') ? 'home' : 'away');
+                
+                // Calculate relative position (simplified)
+                const rect = player.getBoundingClientRect();
+                const fieldRect = document.querySelector('.field').getBoundingClientRect();
+                
+                if (fieldRect.width > 0 && fieldRect.height > 0) {
+                    const relativeX = ((rect.left - fieldRect.left) / fieldRect.width) * 100;
+                    const relativeY = ((rect.top - fieldRect.top) / fieldRect.height) * 100;
+                    
+                    minimapPlayer.style.left = Math.max(0, Math.min(95, relativeX)) + '%';
+                    minimapPlayer.style.top = Math.max(0, Math.min(95, relativeY)) + '%';
+                    
+                    minimapField.appendChild(minimapPlayer);
+                }
+            });
+        }
+
+        // Enhanced keyboard shortcuts with new features
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 'e':
+                    toggleMatchEvents();
+                    showNotification('Match Events Toggled', 'info');
+                    break;
+                case 's':
+                    if (e.ctrlKey) return; // Don't interfere with Ctrl+S
+                    toggleStatistics();
+                    showNotification('Statistics Toggled', 'info');
+                    break;
+                case 'h':
+                    toggleHeatmap();
+                    showNotification('Heatmap Toggled', 'info');
+                    break;
+                case 'm':
+                    simulateMatch();
+                    break;
+                case 'w':
+                    toggleWeather();
+                    showNotification('Weather Widget Toggled', 'info');
+                    break;
+                case 'n':
+                    toggleMinimap();
+                    showNotification('Minimap Toggled', 'info');
+                    break;
+            }
+        });
+        
+        function showKeyboardShortcutsHelp() {
+            const helpText = `
+🎮 KEYBOARD SHORTCUTS:
+
+📋 FORMATIONS:
+1-5 - Home Team Formations
+Q,W,E,R,T - Away Team Formations
+
+🎯 TACTICAL TOOLS:
+D - Toggle Drawing Mode
+C - Clear Tactical Drawings  
+P - Player Database
+S - Substitutions
+G - Show Tactics
+Space - Toggle Timer
+
+🎨 INTERFACE:
+Alt+D - Dark Theme
+Alt+L - Light Theme
+
+⚡ ADVANCED ANALYTICS:
+V - Toggle Match Events
+X - Toggle Statistics Panel
+H - Toggle Player Heatmap
+M - Simulate Match Events
+B - Toggle Weather Widget
+N - Toggle Tactical Minimap
+
+❓ HELP:
+? - Show This Help
+ESC - Close Panels
+
+💡 TIP: Hold Ctrl to prevent shortcuts when typing!
+            `;
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            const helpBox = document.createElement('div');
+            helpBox.style.cssText = `
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                padding: 30px;
+                border-radius: 15px;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                border: 2px solid var(--accent-color);
+                font-family: 'Segoe UI', sans-serif;
+                white-space: pre-line;
+                text-align: left;
+                line-height: 1.4;
+                font-size: 14px;
+            `;
+            
+            helpBox.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px; font-size: 18px; font-weight: bold; color: var(--accent-color);">
+                    ⚽ Football Analytics Pro - Shortcuts
+                </div>
+                ${helpText}
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="this.closest('.help-modal').remove()" style="
+                        background: var(--accent-color);
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: bold;
+                    ">Got it! 👍</button>
+                </div>
+            `;
+            
+            modal.className = 'help-modal';
+            modal.appendChild(helpBox);
+            document.body.appendChild(modal);
+            
+            // Close on click outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+            
+            // Close on escape
+            const escapeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    modal.remove();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
         }
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984c71aa37928f68',t:'MTc1ODgyMzQ2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
