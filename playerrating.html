@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Player Rating - Fan Edition</title>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #dc2626;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-accent: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #475569;
+            --gradient-primary: linear-gradient(135deg, #1e40af, #3b82f6);
+            --gradient-secondary: linear-gradient(135deg, #dc2626, #ef4444);
+            --gradient-success: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .football-icon {
+            animation: rotate 20s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .football-icon img {
+            border-radius: 50%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .brand-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: white;
+            line-height: 1;
+        }
+
+        .brand-tagline {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: normal;
+            line-height: 1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Match Info */
+        .match-info {
+            background: var(--bg-secondary);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+        }
+
+        .match-teams {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .team-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .match-score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--success-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .match-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .match-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Team Sections */
+        .teams-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .team-section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .team-name-header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .home-team .team-name-header {
+            color: var(--secondary-color);
+        }
+
+        .away-team .team-name-header {
+            color: var(--primary-color);
+        }
+
+        .team-average {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--bg-accent);
+            display: inline-block;
+        }
+
+        /* Player Cards */
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .player-card {
+            background: var(--bg-accent);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .player-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(30, 64, 175, 0.2);
+        }
+
+        .player-card.man-of-match {
+            border-color: #fbbf24;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+        }
+
+        .player-card.man-of-match .player-name {
+            color: #000;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .player-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .player-position {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .rating-section {
+            margin-bottom: 16px;
+        }
+
+        .rating-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 2px;
+            justify-content: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .star-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .star {
+            font-size: 1.2rem;
+            color: #4a5568;
+            opacity: 0.3;
+            transition: all 0.2s ease;
+            margin-bottom: 2px;
+        }
+
+        .star-number {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: normal;
+            transition: all 0.2s ease;
+        }
+
+        .star-container:hover .star,
+        .star-container.active .star {
+            color: #fbbf24;
+            opacity: 1;
+            font-weight: bold;
+            transform: scale(1.05);
+        }
+
+        .star-container:hover .star-number,
+        .star-container.active .star-number {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .current-rating {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+
+        .rating-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .motm-button {
+            width: 100%;
+            padding: 10px;
+            background: var(--gradient-success);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .motm-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .motm-button.selected {
+            background: var(--gradient-secondary);
+            box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Statistics Panel */
+        .stats-panel {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .stats-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .stats-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-accent);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .home-stat .stat-value {
+            color: var(--secondary-color);
+        }
+
+        .away-stat .stat-value {
+            color: var(--primary-color);
+        }
+
+        .overall-stat .stat-value {
+            color: var(--success-color);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .primary-btn {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .secondary-btn {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+
+        .success-btn {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .teams-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .match-teams {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--gradient-success);
+        }
+
+        .notification.info {
+            background: var(--gradient-primary);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+        }
+
+        /* Crown Animation for MOTM */
+        .crown {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 1.5rem;
+            animation: crown-bounce 2s infinite;
+        }
+
+        @keyframes crown-bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Rating Animation */
+        @keyframes rating-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .star-container.rating-animation {
+            animation: rating-pop 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo">
+                <div class="football-icon">
+                    <img src="images/Fans Talk 90 Logo PNG.png" alt="Fans Talk 90 Logo" width="50" height="50" />
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Fans Talk 90</span>
+                    <span class="brand-tagline">Player Ratings</span>
+                </div>
+            </div>
+        </div>
+        <h1>⚽ Player Rating System</h1>
+        <p>Rate Your Team's Performance - Fan Edition</p>
+    </div>
+
+    <!-- Match Info -->
+    <div class="match-info">
+        <div class="match-teams">
+            <div class="team-name" id="homeTeamName">Manchester United</div>
+            <div class="match-score" id="matchScore">2 - 1</div>
+            <div class="team-name" id="awayTeamName">Arsenal</div>
+        </div>
+        <div class="match-details">
+            <div class="match-detail">
+                <span>📅</span>
+                <span id="matchDate">March 15, 2025</span>
+            </div>
+            <div class="match-detail">
+                <span>🏟️</span>
+                <span id="venue">Old Trafford</span>
+            </div>
+            <div class="match-detail">
+                <span>⏱️</span>
+                <span id="matchTime">90' + 3'</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Panel -->
+        <div class="stats-panel">
+            <div class="stats-header">
+                <h2>📊 Match Statistics</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card home-stat">
+                    <div class="stat-value" id="homeAvgRating">0.0</div>
+                    <div class="stat-label">Home Team Average</div>
+                </div>
+                <div class="stat-card away-stat">
+                    <div class="stat-value" id="awayAvgRating">0.0</div>
+                    <div class="stat-label">Away Team Average</div>
+                </div>
+                <div class="stat-card overall-stat">
+                    <div class="stat-value" id="overallRating">0.0</div>
+                    <div class="stat-label">Overall Match Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRatings">0</div>
+                    <div class="stat-label">Total Ratings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="motmPlayer">None</div>
+                    <div class="stat-label">Man of the Match</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="topRatedPlayer">None</div>
+                    <div class="stat-label">Highest Rated Player</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teams Container -->
+        <div class="teams-container">
+            <!-- Home Team -->
+            <div class="team-section home-team">
+                <div class="team-header">
+                    <div class="team-name-header">🏠 Manchester United</div>
+                    <div class="team-average">Team Average: <span id="homeTeamAvg">0.0</span>/10</div>
+                </div>
+                <div class="players-grid" id="homePlayers"></div>
+            </div>
+
+            <!-- Away Team -->
+            <div class="team-section away-team">
+                <div class="team-header">
+                    <div class="team-name-header">🚌 Arsenal</div>
+                    <div class="team-average">Team Average: <span id="awayTeamAvg">0.0</span>/10</div>
+                </div>
+                <div class="players-grid" id="awayPlayers"></div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn primary-btn" onclick="resetAllRatings()">🔄 Reset All Ratings</button>
+            <button class="action-btn secondary-btn" onclick="exportRatings()">💾 Export Ratings</button>
+            <button class="action-btn success-btn" onclick="shareResults()">📤 Share Results</button>
+        </div>
+    </div>
+
+    <script>
+        // Player Data
+        const playersData = {
+            home: [
+                { name: "David de Gea", position: "GK" },
+                { name: "Aaron Wan-Bissaka", position: "RB" },
+                { name: "Harry Maguire", position: "CB" },
+                { name: "Raphael Varane", position: "CB" },
+                { name: "Luke Shaw", position: "LB" },
+                { name: "Scott McTominay", position: "CDM" },
+                { name: "Paul Pogba", position: "CM" },
+                { name: "Bruno Fernandes", position: "CAM" },
+                { name: "Jadon Sancho", position: "RW" },
+                { name: "Cristiano Ronaldo", position: "ST" },
+                { name: "Marcus Rashford", position: "LW" }
+            ],
+            away: [
+                { name: "Aaron Ramsdale", position: "GK" },
+                { name: "Ben White", position: "RB" },
+                { name: "William Saliba", position: "CB" },
+                { name: "Gabriel Magalhães", position: "CB" },
+                { name: "Kieran Tierney", position: "LB" },
+                { name: "Thomas Partey", position: "CDM" },
+                { name: "Granit Xhaka", position: "CM" },
+                { name: "Martin Ødegaard", position: "CAM" },
+                { name: "Bukayo Saka", position: "RW" },
+                { name: "Gabriel Jesus", position: "ST" },
+                { name: "Gabriel Martinelli", position: "LW" }
+            ]
+        };
+
+        // Rating System - Single rating per player
+        let playerRatings = {}; // Will store single rating value
+        let playerRated = {}; // Track which players have been rated
+        let manOfTheMatch = null;
+
+        // Initialize the app
+        function initializeApp() {
+            // Initialize rating data structures
+            ['home', 'away'].forEach(team => {
+                playersData[team].forEach((player, index) => {
+                    const playerId = `${team}_${index}`;
+                    playerRatings[playerId] = 0; // Single rating value
+                    playerRated[playerId] = false; // Track if rated
+                });
+            });
+
+            // Render players
+            renderPlayers();
+            updateStatistics();
+        }
+
+        // Render player cards
+        function renderPlayers() {
+            ['home', 'away'].forEach(team => {
+                const container = document.getElementById(`${team}Players`);
+                container.innerHTML = '';
+
+                playersData[team].forEach((player, index) => {
+                    const playerId = `${team}_${index}`;
+                    const rating = playerRatings[playerId];
+                    const isRated = playerRated[playerId];
+                    const isMotm = manOfTheMatch === playerId;
+
+                    const playerCard = document.createElement('div');
+                    playerCard.className = `player-card ${isMotm ? 'man-of-match' : ''} ${isRated ? 'rated' : ''}`;
+                    playerCard.innerHTML = `
+                        ${isMotm ? '<div class="crown">👑</div>' : ''}
+                        <div class="player-info">
+                            <div class="player-name">${player.name}</div>
+                            <div class="player-position">${player.position}</div>
+                        </div>
+                        <div class="rating-section">
+                            <div class="rating-label">${isRated ? 'Your Rating' : 'Rate Performance (1-10)'}</div>
+                            <div class="star-rating ${isRated ? 'disabled' : ''}" data-player="${playerId}">
+                                ${generateStars(playerId, rating, isRated)}
+                            </div>
+                            <div class="current-rating">
+                                ${isRated ? `Your Rating: <span class="rating-value">${rating}</span>/10` : 'Not rated yet'}
+                            </div>
+                            <div class="rating-status">
+                                ${isRated ? '✅ Rating submitted' : '⏳ Awaiting your rating'}
+                            </div>
+                        </div>
+                        <button class="motm-button ${isMotm ? 'selected' : ''} ${!isRated ? 'disabled' : ''}" 
+                                onclick="selectManOfTheMatch('${playerId}')" 
+                                ${!isRated ? 'disabled title="Rate player first to select as MOTM"' : ''}>
+                            ${isMotm ? '👑 Man of the Match!' : (isRated ? '⭐ Select as MOTM' : '⭐ Rate first')}
+                        </button>
+                    `;
+                    container.appendChild(playerCard);
+                });
+            });
+        }
+
+        // Generate star rating system with numbers for single rating
+        function generateStars(playerId, currentRating = 0, isRated = false) {
+            let starsHtml = '';
+            for (let i = 1; i <= 10; i++) {
+                const isActive = isRated && i <= currentRating;
+                const clickHandler = isRated ? '' : `onclick="ratePlayer('${playerId}', ${i})"`;
+                starsHtml += `
+                    <div class="star-container ${isActive ? 'active' : ''} ${isRated ? 'disabled' : ''}" 
+                         data-rating="${i}" ${clickHandler}>
+                        <span class="star">⭐</span>
+                        <span class="star-number">${i}</span>
+                    </div>
+                `;
+            }
+            return starsHtml;
+        }
+
+        // Rate a player (only once)
+        function ratePlayer(playerId, rating) {
+            if (rating < 1 || rating > 10) return;
+            
+            // Prevent re-rating
+            if (playerRated[playerId]) {
+                showNotification('You have already rated this player!', 'warning');
+                return;
+            }
+
+            // Set single rating
+            playerRatings[playerId] = rating;
+            playerRated[playerId] = true;
+
+            // Re-render the specific player card
+            renderPlayers();
+            updateStatistics();
+            
+            showNotification(`Rated ${getPlayerName(playerId)} with ${rating}/10 stars!`, 'success');
+        }
+
+        // Update individual player display
+        function updatePlayerDisplay(playerId) {
+            const avgRating = calculateAverage(playerRatings[playerId]);
+            const card = document.querySelector(`[data-player="${playerId}"]`).closest('.player-card');
+            
+            card.querySelector('.rating-value').textContent = avgRating;
+            card.querySelector('.rating-stats').innerHTML = `
+                <span>Ratings: ${ratingCounts[playerId]}</span>
+                <span>Last: ${getLastRating(playerId)}</span>
+            `;
+        }
+
+        // Calculate average rating
+        function calculateAverage(ratings) {
+            if (ratings.length === 0) return '0.0';
+            const sum = ratings.reduce((a, b) => a + b, 0);
+            return (sum / ratings.length).toFixed(1);
+        }
+
+        // Get last rating
+        function getLastRating(playerId) {
+            const ratings = playerRatings[playerId];
+            return ratings.length > 0 ? ratings[ratings.length - 1] + '/10' : 'None';
+        }
+
+        // Get player name by ID
+        function getPlayerName(playerId) {
+            const [team, index] = playerId.split('_');
+            return playersData[team][parseInt(index)].name;
+        }
+
+        // Select Man of the Match (only if player is rated)
+        function selectManOfTheMatch(playerId) {
+            // Check if player has been rated
+            if (!playerRated[playerId]) {
+                showNotification('Please rate this player before selecting as Man of the Match!', 'warning');
+                return;
+            }
+
+            // Remove previous MOTM
+            if (manOfTheMatch) {
+                // Re-render to update previous MOTM styling
+            }
+
+            // Set new MOTM
+            manOfTheMatch = playerId;
+            
+            // Re-render to update styling
+            renderPlayers();
+            updateStatistics();
+            showNotification(`${getPlayerName(playerId)} selected as Man of the Match! 👑`, 'success');
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            // Calculate team averages
+            const homeAvg = calculateTeamAverage('home');
+            const awayAvg = calculateTeamAverage('away');
+            const overallAvg = calculateOverallAverage();
+            const totalRatings = getTotalRatings();
+            const topRated = getTopRatedPlayer();
+
+            // Update display
+            document.getElementById('homeAvgRating').textContent = homeAvg;
+            document.getElementById('awayAvgRating').textContent = awayAvg;
+            document.getElementById('overallRating').textContent = overallAvg;
+            document.getElementById('totalRatings').textContent = totalRatings;
+            document.getElementById('motmPlayer').textContent = manOfTheMatch ? getPlayerName(manOfTheMatch) : 'None';
+            document.getElementById('topRatedPlayer').textContent = topRated;
+
+            // Update team headers
+            document.getElementById('homeTeamAvg').textContent = homeAvg;
+            document.getElementById('awayTeamAvg').textContent = awayAvg;
+        }
+
+        // Calculate team average for single ratings
+        function calculateTeamAverage(team) {
+            let totalRating = 0;
+            let ratedCount = 0;
+            
+            playersData[team].forEach((player, index) => {
+                const playerId = `${team}_${index}`;
+                if (playerRated[playerId]) {
+                    totalRating += playerRatings[playerId];
+                    ratedCount++;
+                }
+            });
+            
+            return ratedCount > 0 ? (totalRating / ratedCount).toFixed(1) : '0.0';
+        }
+
+        // Calculate overall average for single ratings
+        function calculateOverallAverage() {
+            let totalRating = 0;
+            let ratedCount = 0;
+            
+            Object.keys(playerRatings).forEach(playerId => {
+                if (playerRated[playerId]) {
+                    totalRating += playerRatings[playerId];
+                    ratedCount++;
+                }
+            });
+            
+            return ratedCount > 0 ? (totalRating / ratedCount).toFixed(1) : '0.0';
+        }
+
+        // Get total number of ratings
+        function getTotalRatings() {
+            return Object.values(playerRated).filter(rated => rated).length;
+        }
+
+        // Get top rated player
+        function getTopRatedPlayer() {
+            let topRating = 0;
+            let topPlayer = 'None';
+
+            Object.keys(playerRatings).forEach(playerId => {
+                if (playerRatings[playerId].length > 0) {
+                    const avg = parseFloat(calculateAverage(playerRatings[playerId]));
+                    if (avg > topRating) {
+                        topRating = avg;
+                        topPlayer = getPlayerName(playerId);
+                    }
+                }
+            });
+
+            return topPlayer === 'None' ? 'None' : `${topPlayer} (${topRating.toFixed(1)})`;
+        }
+
+        // Reset all ratings
+        function resetAllRatings() {
+            if (confirm('Are you sure you want to reset all ratings? This cannot be undone.')) {
+                // Reset data
+                Object.keys(playerRatings).forEach(playerId => {
+                    playerRatings[playerId] = 0;
+                    playerRated[playerId] = false;
+                });
+                manOfTheMatch = null;
+
+                // Re-render
+                renderPlayers();
+                updateStatistics();
+                showNotification('All ratings have been reset!', 'info');
+            }
+        }
+
+        // Add CSS for disabled states
+        const disabledStyles = document.createElement('style');
+        disabledStyles.textContent = `
+            .star-rating.disabled .star-container {
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+            
+            .star-rating.disabled .star-container:hover .star,
+            .star-rating.disabled .star-container:hover .star-number {
+                transform: none;
+            }
+            
+            .player-card.rated {
+                border-color: var(--success-color);
+            }
+            
+            .motm-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                background: var(--bg-accent);
+            }
+            
+            .rating-status {
+                text-align: center;
+                font-size: 0.8rem;
+                margin-top: 8px;
+                font-weight: bold;
+            }
+        `;
+        document.head.appendChild(disabledStyles);
+
+        // Export ratings to JSON
+        function exportRatings() {
+            const data = {
+                match: {
+                    homeTeam: document.getElementById('homeTeamName').textContent,
+                    awayTeam: document.getElementById('awayTeamName').textContent,
+                    score: document.getElementById('matchScore').textContent,
+                    date: document.getElementById('matchDate').textContent,
+                    venue: document.getElementById('venue').textContent
+                },
+                ratings: playerRatings,
+                ratingCounts: ratingCounts,
+                manOfTheMatch: manOfTheMatch,
+                statistics: {
+                    homeAverage: calculateTeamAverage('home'),
+                    awayAverage: calculateTeamAverage('away'),
+                    overallAverage: calculateOverallAverage(),
+                    totalRatings: getTotalRatings(),
+                    topRatedPlayer: getTopRatedPlayer()
+                },
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `player-ratings-${new Date().getTime()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification('Ratings exported successfully! 💾', 'success');
+        }
+
+        // Share results
+        function shareResults() {
+            const homeAvg = calculateTeamAverage('home');
+            const awayAvg = calculateTeamAverage('away');
+            const motm = manOfTheMatch ? getPlayerName(manOfTheMatch) : 'None selected';
+            
+            const shareText = `⚽ Player Ratings - ${document.getElementById('homeTeamName').textContent} ${document.getElementById('matchScore').textContent} ${document.getElementById('awayTeamName').textContent}\n\n🏠 Home: ${homeAvg}/10\n🚌 Away: ${awayAvg}/10\n👑 MOTM: ${motm}\n\n#PlayerRatings #Football #FanVoice`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Player Ratings',
+                    text: shareText
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showNotification('Results copied to clipboard! 📋', 'success');
+                });
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
