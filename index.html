@@ -113,22 +113,6 @@
             color: #ffffff;
         }
 
-        /* Tactical Drawing Canvas */
-        .tactical-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .tactical-canvas.drawing {
-            pointer-events: all;
-            cursor: crosshair;
-        }
-
         /* Enhanced Controls */
         .controls-panel {
             position: absolute;
@@ -188,6 +172,376 @@
         .formation-btn.active {
             background: var(--accent-home);
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Formation Dropdown Styles */
+        .formation-selector {
+            position: relative;
+            width: 100%;
+        }
+
+        .formation-dropdown-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--accent-action);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .formation-dropdown-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .formation-dropdown-btn.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .formation-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--background-color);
+            border: 2px solid var(--accent-action);
+            border-radius: 8px;
+            margin-top: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .formation-category {
+            margin: 8px 0;
+        }
+
+        .category-header {
+            background: var(--accent-action);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formation-option {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+        .formation-option:hover {
+            background: var(--accent-action);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .formation-option:last-child {
+            border-bottom: none;
+        }
+
+        /* Team Color & Kit Controls */
+        .color-kit-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .team-color-section {
+            border: 2px solid var(--accent-action);
+            border-radius: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .team-header {
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .color-customizer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .color-inputs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-inputs input[type="color"] {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-inputs input[type="text"] {
+            width: 100px;
+            padding: 8px 12px;
+            border: 2px solid var(--accent-action);
+            border-radius: 8px;
+            background: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .gradient-btn {
+            padding: 8px 12px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .gradient-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .gradient-btn.active {
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+        }
+
+        .color-presets {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .preset-color {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .preset-color:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .preset-color::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .preset-color:hover::after {
+            border-color: var(--accent-home);
+        }
+
+        /* Player Management Controls */
+        .player-management-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        /* Enhanced Player Editor Modal */
+        .player-editor {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            max-width: 1000px;
+            max-height: 90vh;
+            background: var(--background-color);
+            border: 3px solid var(--accent-action);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .editor-header {
+            padding: 24px;
+            border-bottom: 2px solid var(--accent-action);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--accent-home), var(--accent-away));
+            border-radius: 13px 13px 0 0;
+        }
+
+        .editor-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .editor-content {
+            padding: 24px;
+            max-height: 65vh;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .team-editor {
+            border: 2px solid var(--accent-action);
+            border-radius: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .team-editor h4 {
+            color: var(--text-color);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-action);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .player-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .player-edit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .player-edit-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .player-edit-item label {
+            min-width: 35px;
+            font-weight: bold;
+            color: var(--accent-home);
+            text-align: center;
+            background: rgba(220, 38, 38, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .player-edit-item input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid var(--accent-action);
+            border-radius: 8px;
+            background: var(--background-color);
+            color: var(--text-color);
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .player-edit-item input:focus {
+            outline: none;
+            border-color: var(--accent-home);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+            transform: scale(1.02);
+        }
+
+        .editor-footer {
+            padding: 24px;
+            border-top: 2px solid var(--accent-action);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 0 0 13px 13px;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .quick-fill {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .quick-fill select {
+            padding: 8px 12px;
+            border: 2px solid var(--accent-action);
+            border-radius: 6px;
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .editor-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .color-control {
+                flex-wrap: wrap;
+            }
         }
 
         /* Enhanced Keyboard Shortcut Hints */
@@ -750,26 +1104,6 @@
             border-radius: 2px;
         }
 
-        .match-events {
-            position: fixed;
-            top: 120px;
-            right: 20px;
-            width: 300px;
-            max-height: 400px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-primary);
-            border-radius: 15px;
-            padding: 15px;
-            overflow-y: auto;
-            z-index: 999;
-            transition: transform 0.3s ease;
-            transform: translateX(320px);
-        }
-
-        .match-events.open {
-            transform: translateX(0);
-        }
-
         .match-event {
             display: flex;
             align-items: center;
@@ -1230,7 +1564,6 @@
         .fullscreen-mode .theme-switcher,
         .fullscreen-mode .player-database,
         .fullscreen-mode .substitutions-panel,
-        .fullscreen-mode .match-events,
         .fullscreen-mode .statistics-panel {
             display: none !important;
         }
@@ -1270,29 +1603,6 @@
     </style>
 </head>
 <body data-theme="dark">
-    <!-- Match Events Panel -->
-    <div class="match-events" id="matchEvents">
-        <h3 style="color: var(--text-primary); margin-bottom: 15px; text-align: center;">📊 Match Events</h3>
-        <div id="eventsList">
-            <!-- Events will be populated by JavaScript -->
-        </div>
-        <div style="text-align: center; margin-top: 15px;">
-            <button class="action-btn" onclick="clearEvents()">Clear Events</button>
-            <button class="action-btn" onclick="closeMatchEvents()">Close (M)</button>
-        </div>
-    </div>
-
-    <!-- Statistics Panel -->
-    <div class="statistics-panel" id="statisticsPanel">
-        <h3 style="color: var(--text-primary); margin-bottom: 15px; text-align: center;">📈 Match Statistics</h3>
-        <div id="statisticsContent">
-            <!-- Statistics will be populated by JavaScript -->
-        </div>
-        <div style="text-align: center; margin-top: 15px;">
-            <button class="action-btn" onclick="closeStatistics()">Close (X)</button>
-        </div>
-    </div>
-
     <!-- Theme Switcher -->
     <div class="theme-switcher">
         <button class="theme-btn active" onclick="setTheme('dark')" title="Dark Theme (Alt+D)">🌙</button>
@@ -1352,47 +1662,143 @@
             </div>
         </div>
 
+        <!-- Enhanced Player Editor Panel -->
+        <div class="player-editor" id="playerEditor">
+            <div class="editor-header">
+                <h3>⚽ Player Management Studio</h3>
+                <button class="close-btn" onclick="closePlayerEditor()">×</button>
+            </div>
+            <div class="editor-content">
+                <div class="team-editor">
+                    <h4>🏠 Home Team Starting XI</h4>
+                    <div id="homeStartingEditor" class="player-list"></div>
+                </div>
+                <div class="team-editor">
+                    <h4>🏠 Home Team Substitutes</h4>
+                    <div id="homeSubsEditor" class="player-list"></div>
+                </div>
+                <div class="team-editor">
+                    <h4>🚌 Away Team Starting XI</h4>
+                    <div id="awayStartingEditor" class="player-list"></div>
+                </div>
+                <div class="team-editor">
+                    <h4>🚌 Away Team Substitutes</h4>
+                    <div id="awaySubsEditor" class="player-list"></div>
+                </div>
+            </div>
+            <div class="editor-footer">
+                <div class="quick-fill">
+                    <label>Quick Fill:</label>
+                    <select id="quickFillSelect" onchange="quickFillTeam()">
+                        <option value="">Select Team...</option>
+                        <option value="manu">Manchester United</option>
+                        <option value="mancity">Manchester City</option>
+                        <option value="chelsea">Chelsea</option>
+                        <option value="arsenal">Arsenal</option>
+                        <option value="liverpool">Liverpool</option>
+                        <option value="real">Real Madrid</option>
+                        <option value="barca">Barcelona</option>
+                        <option value="psg">PSG</option>
+                        <option value="bayern">Bayern Munich</option>
+                        <option value="random">Random Names</option>
+                    </select>
+                    <button class="action-btn" onclick="swapTeams()">🔄 Swap Teams</button>
+                </div>
+                <div class="editor-actions">
+                    <button class="action-btn" onclick="resetPlayerNames()">🔄 Reset</button>
+                    <button class="action-btn" onclick="savePlayerData()">💾 Save</button>
+                    <button class="action-btn" onclick="closePlayerEditor()">✅ Done</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Interactive Controls -->
         <div class="controls-panel">
             <div class="control-group">
                 <div class="control-label">🏠 Home Formation</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="formation-btn home-formation active" onclick="changeFormation('home', '433')" title="4-3-3 (Press 1)">4-3-3
-                        <span class="shortcut-hint">[1]</span>
+                <div class="formation-selector">
+                    <button class="formation-dropdown-btn" onclick="toggleFormationDropdown('home')" id="homeFormationBtn">
+                        <span id="homeFormationText">4-4-2 Classic</span>
+                        <span class="dropdown-arrow">▼</span>
                     </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '442')" title="4-4-2 (Press 2)">4-4-2
-                        <span class="shortcut-hint">[2]</span>
-                    </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '352')" title="3-5-2 (Press 3)">3-5-2
-                        <span class="shortcut-hint">[3]</span>
-                    </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '4231')" title="4-2-3-1 (Press 4)">4-2-3-1
-                        <span class="shortcut-hint">[4]</span>
-                    </button>
-                    <button class="formation-btn home-formation" onclick="changeFormation('home', '532')" title="5-3-2 (Press 5)">5-3-2
-                        <span class="shortcut-hint">[5]</span>
-                    </button>
+                    <div class="formation-dropdown" id="homeFormationDropdown" style="display: none;">
+                        <div class="formation-category">
+                            <div class="category-header">4-Back Formations</div>
+                            <div class="formation-option" onclick="selectFormation('home', '442', '4-4-2 Classic')">4-4-2 Classic</div>
+                            <div class="formation-option" onclick="selectFormation('home', '4411', '4-4-1-1 Second Striker')">4-4-1-1 Second Striker</div>
+                            <div class="formation-option" onclick="selectFormation('home', '41212', '4-1-2-1-2 Diamond')">4-1-2-1-2 Diamond</div>
+                            <div class="formation-option" onclick="selectFormation('home', '433', '4-3-3 Attacking')">4-3-3 Attacking</div>
+                            <div class="formation-option" onclick="selectFormation('home', '4321', '4-3-2-1 Christmas Tree')">4-3-2-1 Christmas Tree</div>
+                            <div class="formation-option" onclick="selectFormation('home', '4231', '4-2-3-1 Modern')">4-2-3-1 Modern</div>
+                            <div class="formation-option" onclick="selectFormation('home', '4222', '4-2-2-2 Magic Rectangle')">4-2-2-2 Magic Rectangle</div>
+                            <div class="formation-option" onclick="selectFormation('home', '451', '4-5-1 Defensive')">4-5-1 Defensive</div>
+                            <div class="formation-option" onclick="selectFormation('home', '460', '4-6-0 Strikerless')">4-6-0 Strikerless</div>
+                        </div>
+                        <div class="formation-category">
+                            <div class="category-header">3-Back Formations</div>
+                            <div class="formation-option" onclick="selectFormation('home', '343', '3-4-3 Offensive')">3-4-3 Offensive</div>
+                            <div class="formation-option" onclick="selectFormation('home', '3421', '3-4-2-1 Central Overload')">3-4-2-1 Central Overload</div>
+                            <div class="formation-option" onclick="selectFormation('home', '352', '3-5-2 Versatile')">3-5-2 Versatile</div>
+                            <div class="formation-option" onclick="selectFormation('home', '3241', '3-2-4-1 Guardiola')">3-2-4-1 Guardiola</div>
+                            <div class="formation-option" onclick="selectFormation('home', '361', '3-6-1 Possession')">3-6-1 Possession</div>
+                        </div>
+                        <div class="formation-category">
+                            <div class="category-header">5-Back Formations</div>
+                            <div class="formation-option" onclick="selectFormation('home', '532', '5-3-2 Solid Defense')">5-3-2 Solid Defense</div>
+                            <div class="formation-option" onclick="selectFormation('home', '541', '5-4-1 Ultra Defensive')">5-4-1 Ultra Defensive</div>
+                        </div>
+                        <div class="formation-category">
+                            <div class="category-header">Historical Formations</div>
+                            <div class="formation-option" onclick="selectFormation('home', '235', '2-3-5 Pyramid')">2-3-5 Pyramid</div>
+                            <div class="formation-option" onclick="selectFormation('home', 'WM', 'WM Formation')">WM Formation</div>
+                            <div class="formation-option" onclick="selectFormation('home', '424', '4-2-4 Brazilian')">4-2-4 Brazilian</div>
+                            <div class="formation-option" onclick="selectFormation('home', 'Catenaccio', 'Catenaccio Italian Defense')">Catenaccio Italian Defense</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="control-group">
                 <div class="control-label">🚌 Away Formation</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="formation-btn away-formation active" onclick="changeFormation('away', '433')" title="4-3-3 (Press Q)">4-3-3
-                        <span class="shortcut-hint">[Q]</span>
+                <div class="formation-selector">
+                    <button class="formation-dropdown-btn" onclick="toggleFormationDropdown('away')" id="awayFormationBtn">
+                        <span id="awayFormationText">4-4-2 Classic</span>
+                        <span class="dropdown-arrow">▼</span>
                     </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '442')" title="4-4-2 (Press W)">4-4-2
-                        <span class="shortcut-hint">[W]</span>
-                    </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '352')" title="3-5-2 (Press E)">3-5-2
-                        <span class="shortcut-hint">[E]</span>
-                    </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '4231')" title="4-2-3-1 (Press R)">4-2-3-1
-                        <span class="shortcut-hint">[R]</span>
-                    </button>
-                    <button class="formation-btn away-formation" onclick="changeFormation('away', '532')" title="5-3-2 (Press T)">5-3-2
-                        <span class="shortcut-hint">[T]</span>
-                    </button>
+                    <div class="formation-dropdown" id="awayFormationDropdown" style="display: none;">
+                        <div class="formation-category">
+                            <div class="category-header">4-Back Formations</div>
+                            <div class="formation-option" onclick="selectFormation('away', '442', '4-4-2 Classic')">4-4-2 Classic</div>
+                            <div class="formation-option" onclick="selectFormation('away', '4411', '4-4-1-1 Second Striker')">4-4-1-1 Second Striker</div>
+                            <div class="formation-option" onclick="selectFormation('away', '41212', '4-1-2-1-2 Diamond')">4-1-2-1-2 Diamond</div>
+                            <div class="formation-option" onclick="selectFormation('away', '433', '4-3-3 Attacking')">4-3-3 Attacking</div>
+                            <div class="formation-option" onclick="selectFormation('away', '4321', '4-3-2-1 Christmas Tree')">4-3-2-1 Christmas Tree</div>
+                            <div class="formation-option" onclick="selectFormation('away', '4231', '4-2-3-1 Modern')">4-2-3-1 Modern</div>
+                            <div class="formation-option" onclick="selectFormation('away', '4222', '4-2-2-2 Magic Rectangle')">4-2-2-2 Magic Rectangle</div>
+                            <div class="formation-option" onclick="selectFormation('away', '451', '4-5-1 Defensive')">4-5-1 Defensive</div>
+                            <div class="formation-option" onclick="selectFormation('away', '460', '4-6-0 Strikerless')">4-6-0 Strikerless</div>
+                        </div>
+                        <div class="formation-category">
+                            <div class="category-header">3-Back Formations</div>
+                            <div class="formation-option" onclick="selectFormation('away', '343', '3-4-3 Offensive')">3-4-3 Offensive</div>
+                            <div class="formation-option" onclick="selectFormation('away', '3421', '3-4-2-1 Central Overload')">3-4-2-1 Central Overload</div>
+                            <div class="formation-option" onclick="selectFormation('away', '352', '3-5-2 Versatile')">3-5-2 Versatile</div>
+                            <div class="formation-option" onclick="selectFormation('away', '3241', '3-2-4-1 Guardiola')">3-2-4-1 Guardiola</div>
+                            <div class="formation-option" onclick="selectFormation('away', '361', '3-6-1 Possession')">3-6-1 Possession</div>
+                        </div>
+                        <div class="formation-category">
+                            <div class="category-header">5-Back Formations</div>
+                            <div class="formation-option" onclick="selectFormation('away', '532', '5-3-2 Solid Defense')">5-3-2 Solid Defense</div>
+                            <div class="formation-option" onclick="selectFormation('away', '541', '5-4-1 Ultra Defensive')">5-4-1 Ultra Defensive</div>
+                        </div>
+                        <div class="formation-category">
+                            <div class="category-header">Historical Formations</div>
+                            <div class="formation-option" onclick="selectFormation('away', '235', '2-3-5 Pyramid')">2-3-5 Pyramid</div>
+                            <div class="formation-option" onclick="selectFormation('away', 'WM', 'WM Formation')">WM Formation</div>
+                            <div class="formation-option" onclick="selectFormation('away', '424', '4-2-4 Brazilian')">4-2-4 Brazilian</div>
+                            <div class="formation-option" onclick="selectFormation('away', 'Catenaccio', 'Catenaccio Italian Defense')">Catenaccio Italian Defense</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1414,13 +1820,61 @@
             </div>
             
             <div class="control-group">
-                <div class="control-label">🎨 Tactical Tools</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="action-btn" onclick="toggleDrawingMode()" id="drawBtn" title="Drawing Mode (Press D)">✏️ Draw
-                        <span class="shortcut-hint">[D]</span>
+                <div class="control-label">🎨 Team Colors & Kits</div>
+                <div class="color-kit-controls">
+                    <div class="team-color-section">
+                        <div class="team-header">🏠 Home Team</div>
+                        <div class="color-customizer">
+                            <div class="color-inputs">
+                                <input type="color" id="homeColorPicker" value="#dc2626" onchange="changeTeamColor('home', this.value)">
+                                <input type="text" id="homeColorHex" value="#dc2626" onchange="changeTeamColorHex('home', this.value)" placeholder="#FF0000">
+                                <button class="gradient-btn" onclick="toggleGradient('home')" id="homeGradientBtn" title="Toggle Gradient">🌈</button>
+                            </div>
+                            <div class="color-presets" id="homeColorPresets">
+                                <div class="preset-color" style="background: #dc2626" onclick="applyPresetColor('home', '#dc2626')" title="Manchester United Red"></div>
+                                <div class="preset-color" style="background: #0ea5e9" onclick="applyPresetColor('home', '#0ea5e9')" title="Manchester City Blue"></div>
+                                <div class="preset-color" style="background: #059669" onclick="applyPresetColor('home', '#059669')" title="Celtic Green"></div>
+                                <div class="preset-color" style="background: #7c3aed" onclick="applyPresetColor('home', '#7c3aed')" title="Fiorentina Purple"></div>
+                                <div class="preset-color" style="background: #ea580c" onclick="applyPresetColor('home', '#ea580c')" title="Netherlands Orange"></div>
+                                <div class="preset-color" style="background: #000000" onclick="applyPresetColor('home', '#000000')" title="All Blacks"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-color-section">
+                        <div class="team-header">🚌 Away Team</div>
+                        <div class="color-customizer">
+                            <div class="color-inputs">
+                                <input type="color" id="awayColorPicker" value="#2563eb" onchange="changeTeamColor('away', this.value)">
+                                <input type="text" id="awayColorHex" value="#2563eb" onchange="changeTeamColorHex('away', this.value)" placeholder="#0000FF">
+                                <button class="gradient-btn" onclick="toggleGradient('away')" id="awayGradientBtn" title="Toggle Gradient">🌈</button>
+                            </div>
+                            <div class="color-presets" id="awayColorPresets">
+                                <div class="preset-color" style="background: #2563eb" onclick="applyPresetColor('away', '#2563eb')" title="Chelsea Blue"></div>
+                                <div class="preset-color" style="background: #ffffff; border: 2px solid #ddd" onclick="applyPresetColor('away', '#ffffff')" title="Real Madrid White"></div>
+                                <div class="preset-color" style="background: #fbbf24" onclick="applyPresetColor('away', '#fbbf24')" title="Borussia Yellow"></div>
+                                <div class="preset-color" style="background: #ef4444" onclick="applyPresetColor('away', '#ef4444')" title="Liverpool Red"></div>
+                                <div class="preset-color" style="background: #1f2937" onclick="applyPresetColor('away', '#1f2937')" title="Juventus Black"></div>
+                                <div class="preset-color" style="background: #f97316" onclick="applyPresetColor('away', '#f97316')" title="Valencia Orange"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">👥 Player Management</div>
+                <div class="player-management-controls">
+                    <button class="action-btn" onclick="togglePlayerEditor()" id="playerEditBtn">📝 Edit Names
+                        <span class="shortcut-hint">[N]</span>
                     </button>
-                    <button class="action-btn" onclick="clearDrawing()" title="Clear Drawing (Press C)">🗑️ Clear
-                        <span class="shortcut-hint">[C]</span>
+                    <button class="action-btn" onclick="toggleSquadBuilder()" id="squadBuilderBtn">🏗️ Squad Builder
+                        <span class="shortcut-hint">[B]</span>
+                    </button>
+                    <button class="action-btn" onclick="randomizeNames()" id="randomizeBtn">🎲 Random Names
+                        <span class="shortcut-hint">[Shift+R]</span>
+                    </button>
+                    <button class="action-btn" onclick="importExportPlayers()" id="importExportBtn">📋 Import/Export
+                        <span class="shortcut-hint">[I]</span>
                     </button>
                 </div>
             </div>
@@ -1446,23 +1900,6 @@
                 </div>
             </div>
             
-            <div class="control-group">
-                <div class="control-label">📊 Analytics</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="action-btn" onclick="toggleMatchEvents()" title="Match Events (Press V)">📊 Events
-                        <span class="shortcut-hint">[V]</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleStatistics()" title="Statistics (Press X)">📈 Stats
-                        <span class="shortcut-hint">[X]</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleHeatmap()" title="Heatmap (Press H)">🔥 Heatmap
-                        <span class="shortcut-hint">[H]</span>
-                    </button>
-                    <button class="action-btn" onclick="simulateMatch()" title="Simulate Match (Press M)">⚡ Simulate
-                        <span class="shortcut-hint">[M]</span>
-                    </button>
-                </div>
-            </div>
         </div>
         
         <div class="scoreboard">
@@ -1483,11 +1920,6 @@
             <div class="heatmap-overlay" id="heatmapOverlay">
                 <!-- Heat zones will be populated by JavaScript -->
             </div>
-            
-            <!-- Tactical Drawing Canvas -->
-            <svg class="tactical-canvas" id="tacticalCanvas" width="100%" height="100%">
-                <!-- Drawing elements will be added here -->
-            </svg>
             
             <!-- Formation overlay -->
             <div class="formation-overlay" id="formationOverlay">
@@ -1649,8 +2081,8 @@
         let currentTime = 45 * 60; // 45 minutes in seconds
         let homeScore = 2;
         let awayScore = 1;
-        let homeFormation = '433';
-        let awayFormation = '433';
+        let homeFormation = '442';
+        let awayFormation = '442';
         let selectedFieldPlayer = null;
         let selectedSubPlayer = null;
         let isDrawingMode = false;
@@ -1705,34 +2137,7 @@
 
         // Enhanced Formation configurations
         const formations = {
-            '433': {
-                home: [
-                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'RB', left: '120px', top: '20%' },
-                    { pos: 'CB', left: '120px', top: '38%' },
-                    { pos: 'CB', left: '120px', top: '62%' },
-                    { pos: 'LB', left: '120px', top: '80%' },
-                    { pos: 'CM', left: '240px', top: '30%' },
-                    { pos: 'CM', left: '240px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CM', left: '240px', top: '70%' },
-                    { pos: 'RW', left: '360px', top: '25%' },
-                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'LW', left: '360px', top: '75%' }
-                ],
-                away: [
-                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'LB', right: '120px', top: '20%' },
-                    { pos: 'CB', right: '120px', top: '38%' },
-                    { pos: 'CB', right: '120px', top: '62%' },
-                    { pos: 'RB', right: '120px', top: '80%' },
-                    { pos: 'CM', right: '240px', top: '30%' },
-                    { pos: 'CM', right: '240px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CM', right: '240px', top: '70%' },
-                    { pos: 'LW', right: '360px', top: '25%' },
-                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'RW', right: '360px', top: '75%' }
-                ]
-            },
+            // 4-Back Formations
             '442': {
                 home: [
                     { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
@@ -1761,32 +2166,116 @@
                     { pos: 'ST', right: '360px', top: '60%' }
                 ]
             },
-            '352': {
+            '4411': {
                 home: [
                     { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', left: '120px', top: '30%' },
-                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', left: '120px', top: '70%' },
-                    { pos: 'RWB', left: '200px', top: '15%' },
-                    { pos: 'CM', left: '200px', top: '35%' },
-                    { pos: 'CM', left: '200px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CM', left: '200px', top: '65%' },
-                    { pos: 'LWB', left: '200px', top: '85%' },
-                    { pos: 'ST', left: '340px', top: '40%' },
-                    { pos: 'ST', left: '340px', top: '60%' }
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'RM', left: '220px', top: '15%' },
+                    { pos: 'CM', left: '220px', top: '40%' },
+                    { pos: 'CM', left: '220px', top: '60%' },
+                    { pos: 'LM', left: '220px', top: '85%' },
+                    { pos: 'CAM', left: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
                 ],
                 away: [
                     { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', right: '120px', top: '30%' },
-                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', right: '120px', top: '70%' },
-                    { pos: 'LWB', right: '200px', top: '15%' },
-                    { pos: 'CM', right: '200px', top: '35%' },
-                    { pos: 'CM', right: '200px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CM', right: '200px', top: '65%' },
-                    { pos: 'RWB', right: '200px', top: '85%' },
-                    { pos: 'ST', right: '340px', top: '40%' },
-                    { pos: 'ST', right: '340px', top: '60%' }
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'LM', right: '220px', top: '15%' },
+                    { pos: 'CM', right: '220px', top: '40%' },
+                    { pos: 'CM', right: '220px', top: '60%' },
+                    { pos: 'RM', right: '220px', top: '85%' },
+                    { pos: 'CAM', right: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            '41212': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'CDM', left: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LM', left: '260px', top: '20%' },
+                    { pos: 'RM', left: '260px', top: '80%' },
+                    { pos: 'CAM', left: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'ST', left: '360px', top: '40%' },
+                    { pos: 'ST', left: '360px', top: '60%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'CDM', right: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RM', right: '260px', top: '20%' },
+                    { pos: 'LM', right: '260px', top: '80%' },
+                    { pos: 'CAM', right: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'ST', right: '360px', top: '40%' },
+                    { pos: 'ST', right: '360px', top: '60%' }
+                ]
+            },
+            '433': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'CM', left: '240px', top: '30%' },
+                    { pos: 'CM', left: '240px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '240px', top: '70%' },
+                    { pos: 'RW', left: '360px', top: '25%' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LW', left: '360px', top: '75%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'CM', right: '240px', top: '30%' },
+                    { pos: 'CM', right: '240px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '240px', top: '70%' },
+                    { pos: 'LW', right: '360px', top: '25%' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RW', right: '360px', top: '75%' }
+                ]
+            },
+            '4321': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'CM', left: '240px', top: '30%' },
+                    { pos: 'CM', left: '240px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '240px', top: '70%' },
+                    { pos: 'RF', left: '320px', top: '35%' },
+                    { pos: 'LF', left: '320px', top: '65%' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'CM', right: '240px', top: '30%' },
+                    { pos: 'CM', right: '240px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '240px', top: '70%' },
+                    { pos: 'LF', right: '320px', top: '35%' },
+                    { pos: 'RF', right: '320px', top: '65%' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
                 ]
             },
             '4231': {
@@ -1798,9 +2287,9 @@
                     { pos: 'LB', left: '120px', top: '80%' },
                     { pos: 'CDM', left: '200px', top: '40%' },
                     { pos: 'CDM', left: '200px', top: '60%' },
-                    { pos: 'CAM', left: '280px', top: '20%' },
+                    { pos: 'RAM', left: '280px', top: '20%' },
                     { pos: 'CAM', left: '280px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CAM', left: '280px', top: '80%' },
+                    { pos: 'LAM', left: '280px', top: '80%' },
                     { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
                 ],
                 away: [
@@ -1811,20 +2300,246 @@
                     { pos: 'RB', right: '120px', top: '80%' },
                     { pos: 'CDM', right: '200px', top: '40%' },
                     { pos: 'CDM', right: '200px', top: '60%' },
-                    { pos: 'CAM', right: '280px', top: '20%' },
+                    { pos: 'LAM', right: '280px', top: '20%' },
                     { pos: 'CAM', right: '280px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CAM', right: '280px', top: '80%' },
+                    { pos: 'RAM', right: '280px', top: '80%' },
                     { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
                 ]
             },
+            '4222': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'CDM', left: '200px', top: '40%' },
+                    { pos: 'CDM', left: '200px', top: '60%' },
+                    { pos: 'RW', left: '280px', top: '25%' },
+                    { pos: 'LW', left: '280px', top: '75%' },
+                    { pos: 'ST', left: '360px', top: '40%' },
+                    { pos: 'ST', left: '360px', top: '60%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'CDM', right: '200px', top: '40%' },
+                    { pos: 'CDM', right: '200px', top: '60%' },
+                    { pos: 'LW', right: '280px', top: '25%' },
+                    { pos: 'RW', right: '280px', top: '75%' },
+                    { pos: 'ST', right: '360px', top: '40%' },
+                    { pos: 'ST', right: '360px', top: '60%' }
+                ]
+            },
+            '451': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'RM', left: '220px', top: '15%' },
+                    { pos: 'CM', left: '220px', top: '35%' },
+                    { pos: 'CM', left: '220px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '220px', top: '65%' },
+                    { pos: 'LM', left: '220px', top: '85%' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'LM', right: '220px', top: '15%' },
+                    { pos: 'CM', right: '220px', top: '35%' },
+                    { pos: 'CM', right: '220px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '220px', top: '65%' },
+                    { pos: 'RM', right: '220px', top: '85%' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            '460': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '20%' },
+                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'CB', left: '120px', top: '62%' },
+                    { pos: 'LB', left: '120px', top: '80%' },
+                    { pos: 'RM', left: '200px', top: '10%' },
+                    { pos: 'CM', left: '200px', top: '30%' },
+                    { pos: 'CM', left: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '200px', top: '70%' },
+                    { pos: 'LM', left: '200px', top: '90%' },
+                    { pos: 'F', left: '340px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '20%' },
+                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'CB', right: '120px', top: '62%' },
+                    { pos: 'RB', right: '120px', top: '80%' },
+                    { pos: 'LM', right: '200px', top: '10%' },
+                    { pos: 'CM', right: '200px', top: '30%' },
+                    { pos: 'CM', right: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '200px', top: '70%' },
+                    { pos: 'RM', right: '200px', top: '90%' },
+                    { pos: 'F', right: '340px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            // 3-Back Formations
+            '343': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', left: '120px', top: '30%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', left: '120px', top: '70%' },
+                    { pos: 'RWB', left: '200px', top: '15%' },
+                    { pos: 'CM', left: '200px', top: '35%' },
+                    { pos: 'CM', left: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '200px', top: '65%' },
+                    { pos: 'LWB', left: '200px', top: '85%' },
+                    { pos: 'RF', left: '340px', top: '35%' },
+                    { pos: 'LF', left: '340px', top: '65%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', right: '120px', top: '30%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', right: '120px', top: '70%' },
+                    { pos: 'LWB', right: '200px', top: '15%' },
+                    { pos: 'CM', right: '200px', top: '35%' },
+                    { pos: 'CM', right: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '200px', top: '65%' },
+                    { pos: 'RWB', right: '200px', top: '85%' },
+                    { pos: 'LF', right: '340px', top: '35%' },
+                    { pos: 'RF', right: '340px', top: '65%' }
+                ]
+            },
+            '3421': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', left: '120px', top: '30%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', left: '120px', top: '70%' },
+                    { pos: 'RM', left: '200px', top: '20%' },
+                    { pos: 'CM', left: '200px', top: '40%' },
+                    { pos: 'CM', left: '200px', top: '60%' },
+                    { pos: 'LM', left: '200px', top: '80%' },
+                    { pos: 'RF', left: '320px', top: '35%' },
+                    { pos: 'LF', left: '320px', top: '65%' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', right: '120px', top: '30%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', right: '120px', top: '70%' },
+                    { pos: 'LM', right: '200px', top: '20%' },
+                    { pos: 'CM', right: '200px', top: '40%' },
+                    { pos: 'CM', right: '200px', top: '60%' },
+                    { pos: 'RM', right: '200px', top: '80%' },
+                    { pos: 'LF', right: '320px', top: '35%' },
+                    { pos: 'RF', right: '320px', top: '65%' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            '352': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', left: '120px', top: '30%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', left: '120px', top: '70%' },
+                    { pos: 'RWB', left: '200px', top: '15%' },
+                    { pos: 'CM', left: '200px', top: '35%' },
+                    { pos: 'CM', left: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '200px', top: '65%' },
+                    { pos: 'LWB', left: '200px', top: '85%' },
+                    { pos: 'ST', left: '340px', top: '40%' },
+                    { pos: 'ST', left: '340px', top: '60%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', right: '120px', top: '30%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', right: '120px', top: '70%' },
+                    { pos: 'LWB', right: '200px', top: '15%' },
+                    { pos: 'CM', right: '200px', top: '35%' },
+                    { pos: 'CM', right: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '200px', top: '65%' },
+                    { pos: 'RWB', right: '200px', top: '85%' },
+                    { pos: 'ST', right: '340px', top: '40%' },
+                    { pos: 'ST', right: '340px', top: '60%' }
+                ]
+            },
+            '3241': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', left: '120px', top: '30%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', left: '120px', top: '70%' },
+                    { pos: 'RWB', left: '180px', top: '15%' },
+                    { pos: 'LWB', left: '180px', top: '85%' },
+                    { pos: 'CM', left: '220px', top: '35%' },
+                    { pos: 'CM', left: '220px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', left: '220px', top: '65%' },
+                    { pos: 'CAM', left: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'ST', left: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', right: '120px', top: '30%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', right: '120px', top: '70%' },
+                    { pos: 'LWB', right: '180px', top: '15%' },
+                    { pos: 'RWB', right: '180px', top: '85%' },
+                    { pos: 'CM', right: '220px', top: '35%' },
+                    { pos: 'CM', right: '220px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'CM', right: '220px', top: '65%' },
+                    { pos: 'CAM', right: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'ST', right: '360px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            '361': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', left: '120px', top: '30%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', left: '120px', top: '70%' },
+                    { pos: 'RM', left: '180px', top: '10%' },
+                    { pos: 'CM', left: '180px', top: '25%' },
+                    { pos: 'CM', left: '180px', top: '40%' },
+                    { pos: 'CM', left: '180px', top: '60%' },
+                    { pos: 'CM', left: '180px', top: '75%' },
+                    { pos: 'LM', left: '180px', top: '90%' },
+                    { pos: 'ST', left: '340px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', right: '120px', top: '30%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', right: '120px', top: '70%' },
+                    { pos: 'LM', right: '180px', top: '10%' },
+                    { pos: 'CM', right: '180px', top: '25%' },
+                    { pos: 'CM', right: '180px', top: '40%' },
+                    { pos: 'CM', right: '180px', top: '60%' },
+                    { pos: 'CM', right: '180px', top: '75%' },
+                    { pos: 'RM', right: '180px', top: '90%' },
+                    { pos: 'ST', right: '340px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            // 5-Back Formations
             '532': {
                 home: [
                     { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', left: '120px', top: '20%' },
-                    { pos: 'CB', left: '120px', top: '38%' },
+                    { pos: 'RWB', left: '120px', top: '15%' },
+                    { pos: 'RCB', left: '120px', top: '35%' },
                     { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', left: '120px', top: '62%' },
-                    { pos: 'CB', left: '120px', top: '80%' },
+                    { pos: 'LCB', left: '120px', top: '65%' },
+                    { pos: 'LWB', left: '120px', top: '85%' },
                     { pos: 'CM', left: '240px', top: '35%' },
                     { pos: 'CM', left: '240px', top: '50%', transform: 'translateY(-50%)' },
                     { pos: 'CM', left: '240px', top: '65%' },
@@ -1833,20 +2548,160 @@
                 ],
                 away: [
                     { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', right: '120px', top: '20%' },
-                    { pos: 'CB', right: '120px', top: '38%' },
+                    { pos: 'LWB', right: '120px', top: '15%' },
+                    { pos: 'LCB', right: '120px', top: '35%' },
                     { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
-                    { pos: 'CB', right: '120px', top: '62%' },
-                    { pos: 'CB', right: '120px', top: '80%' },
+                    { pos: 'RCB', right: '120px', top: '65%' },
+                    { pos: 'RWB', right: '120px', top: '85%' },
                     { pos: 'CM', right: '240px', top: '35%' },
                     { pos: 'CM', right: '240px', top: '50%', transform: 'translateY(-50%)' },
                     { pos: 'CM', right: '240px', top: '65%' },
                     { pos: 'ST', right: '340px', top: '40%' },
                     { pos: 'ST', right: '340px', top: '60%' }
                 ]
+            },
+            '541': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RWB', left: '120px', top: '15%' },
+                    { pos: 'RCB', left: '120px', top: '35%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LCB', left: '120px', top: '65%' },
+                    { pos: 'LWB', left: '120px', top: '85%' },
+                    { pos: 'RM', left: '200px', top: '20%' },
+                    { pos: 'CM', left: '200px', top: '40%' },
+                    { pos: 'CM', left: '200px', top: '60%' },
+                    { pos: 'LM', left: '200px', top: '80%' },
+                    { pos: 'ST', left: '340px', top: '50%', transform: 'translateY(-50%)' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LWB', right: '120px', top: '15%' },
+                    { pos: 'LCB', right: '120px', top: '35%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RCB', right: '120px', top: '65%' },
+                    { pos: 'RWB', right: '120px', top: '85%' },
+                    { pos: 'LM', right: '200px', top: '20%' },
+                    { pos: 'CM', right: '200px', top: '40%' },
+                    { pos: 'CM', right: '200px', top: '60%' },
+                    { pos: 'RM', right: '200px', top: '80%' },
+                    { pos: 'ST', right: '340px', top: '50%', transform: 'translateY(-50%)' }
+                ]
+            },
+            // Historical Formations
+            '235': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '30%' },
+                    { pos: 'LB', left: '120px', top: '70%' },
+                    { pos: 'RH', left: '200px', top: '20%' },
+                    { pos: 'CH', left: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LH', left: '200px', top: '80%' },
+                    { pos: 'RW', left: '300px', top: '10%' },
+                    { pos: 'IR', left: '300px', top: '30%' },
+                    { pos: 'CF', left: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'IL', left: '300px', top: '70%' },
+                    { pos: 'LW', left: '300px', top: '90%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '30%' },
+                    { pos: 'RB', right: '120px', top: '70%' },
+                    { pos: 'LH', right: '200px', top: '20%' },
+                    { pos: 'CH', right: '200px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RH', right: '200px', top: '80%' },
+                    { pos: 'LW', right: '300px', top: '10%' },
+                    { pos: 'IL', right: '300px', top: '30%' },
+                    { pos: 'CF', right: '300px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'IR', right: '300px', top: '70%' },
+                    { pos: 'RW', right: '300px', top: '90%' }
+                ]
+            },
+            'WM': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '25%' },
+                    { pos: 'CB', left: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', left: '120px', top: '75%' },
+                    { pos: 'RH', left: '200px', top: '35%' },
+                    { pos: 'LH', left: '200px', top: '65%' },
+                    { pos: 'RW', left: '280px', top: '15%' },
+                    { pos: 'IR', left: '280px', top: '35%' },
+                    { pos: 'CF', left: '280px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'IL', left: '280px', top: '65%' },
+                    { pos: 'LW', left: '280px', top: '85%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '25%' },
+                    { pos: 'CB', right: '120px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', right: '120px', top: '75%' },
+                    { pos: 'LH', right: '200px', top: '35%' },
+                    { pos: 'RH', right: '200px', top: '65%' },
+                    { pos: 'LW', right: '280px', top: '15%' },
+                    { pos: 'IL', right: '280px', top: '35%' },
+                    { pos: 'CF', right: '280px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'IR', right: '280px', top: '65%' },
+                    { pos: 'RW', right: '280px', top: '85%' }
+                ]
+            },
+            '424': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '120px', top: '25%' },
+                    { pos: 'RCB', left: '120px', top: '42%' },
+                    { pos: 'LCB', left: '120px', top: '58%' },
+                    { pos: 'LB', left: '120px', top: '75%' },
+                    { pos: 'RM', left: '240px', top: '30%' },
+                    { pos: 'LM', left: '240px', top: '70%' },
+                    { pos: 'RW', left: '320px', top: '20%' },
+                    { pos: 'RF', left: '320px', top: '40%' },
+                    { pos: 'LF', left: '320px', top: '60%' },
+                    { pos: 'LW', left: '320px', top: '80%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '120px', top: '25%' },
+                    { pos: 'LCB', right: '120px', top: '42%' },
+                    { pos: 'RCB', right: '120px', top: '58%' },
+                    { pos: 'RB', right: '120px', top: '75%' },
+                    { pos: 'LM', right: '240px', top: '30%' },
+                    { pos: 'RM', right: '240px', top: '70%' },
+                    { pos: 'LW', right: '320px', top: '20%' },
+                    { pos: 'LF', right: '320px', top: '40%' },
+                    { pos: 'RF', right: '320px', top: '60%' },
+                    { pos: 'RW', right: '320px', top: '80%' }
+                ]
+            },
+            'Catenaccio': {
+                home: [
+                    { pos: 'GK', left: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'SW', left: '100px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RB', left: '140px', top: '25%' },
+                    { pos: 'RCB', left: '140px', top: '42%' },
+                    { pos: 'LCB', left: '140px', top: '58%' },
+                    { pos: 'LB', left: '140px', top: '75%' },
+                    { pos: 'RM', left: '220px', top: '20%' },
+                    { pos: 'CM', left: '220px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LM', left: '220px', top: '80%' },
+                    { pos: 'CF', left: '320px', top: '35%' },
+                    { pos: 'CF', left: '320px', top: '65%' }
+                ],
+                away: [
+                    { pos: 'GK', right: '30px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'SW', right: '100px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'LB', right: '140px', top: '25%' },
+                    { pos: 'LCB', right: '140px', top: '42%' },
+                    { pos: 'RCB', right: '140px', top: '58%' },
+                    { pos: 'RB', right: '140px', top: '75%' },
+                    { pos: 'LM', right: '220px', top: '20%' },
+                    { pos: 'CM', right: '220px', top: '50%', transform: 'translateY(-50%)' },
+                    { pos: 'RM', right: '220px', top: '80%' },
+                    { pos: 'CF', right: '320px', top: '35%' },
+                    { pos: 'CF', right: '320px', top: '65%' }
+                ]
             }
         };
-
         // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
             const players = document.querySelectorAll('.player');
@@ -1864,15 +2719,6 @@
                 player.addEventListener('click', selectSubPlayer);
             });
 
-            // Initialize tactical canvas
-            const canvas = document.getElementById('tacticalCanvas');
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', stopDrag);
-            
             // Initialize keyboard shortcuts
             document.addEventListener('keydown', handleKeyboardShortcuts);
             
@@ -1887,7 +2733,6 @@
             updateMatchStatistics();
             
             // Hide all advanced panels initially
-            document.getElementById('matchEvents').style.display = 'none';
             document.getElementById('statisticsPanel').style.display = 'none';
             document.getElementById('heatmapOverlay').style.display = 'none';
             
@@ -1964,64 +2809,6 @@
             document.getElementById('playerDatabase').classList.remove('open');
         }
 
-        // Tactical Drawing Functions
-        function toggleDrawingMode() {
-            isDrawingMode = !isDrawingMode;
-            const canvas = document.getElementById('tacticalCanvas');
-            const drawBtn = document.getElementById('drawBtn');
-            
-            if (isDrawingMode) {
-                canvas.classList.add('drawing');
-                drawBtn.style.background = 'var(--accent-home)';
-                drawBtn.innerHTML = '✏️ Drawing ON<span class="shortcut-hint">D</span>';
-                showNotification('Drawing mode enabled! Click and drag to draw tactical lines.', 'info');
-            } else {
-                canvas.classList.remove('drawing');
-                drawBtn.style.background = 'var(--accent-action)';
-                drawBtn.innerHTML = '✏️ Draw<span class="shortcut-hint">D</span>';
-                showNotification('Drawing mode disabled.', 'info');
-            }
-        }
-
-        function startDrawing(e) {
-            if (!isDrawingMode) return;
-            isDrawing = true;
-            const rect = e.target.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            currentPath.setAttribute('stroke', '#ffff00');
-            currentPath.setAttribute('stroke-width', '3');
-            currentPath.setAttribute('fill', 'none');
-            currentPath.setAttribute('stroke-linecap', 'round');
-            currentPath.setAttribute('d', `M ${x} ${y}`);
-            document.getElementById('tacticalCanvas').appendChild(currentPath);
-        }
-
-        function draw(e) {
-            if (!isDrawingMode || !isDrawing || !currentPath) return;
-            const rect = e.target.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const d = currentPath.getAttribute('d');
-            currentPath.setAttribute('d', d + ` L ${x} ${y}`);
-        }
-
-        function stopDrawing() {
-            isDrawing = false;
-            currentPath = null;
-        }
-
-        function clearDrawing() {
-            const canvas = document.getElementById('tacticalCanvas');
-            while (canvas.firstChild) {
-                canvas.removeChild(canvas.firstChild);
-            }
-            showNotification('Tactical drawings cleared!', 'success');
-        }
-
         // Keyboard Shortcuts
         function handleKeyboardShortcuts(e) {
             // Prevent shortcuts when typing in input fields
@@ -2041,19 +2828,11 @@
                     changeFormation('away', '4231'); 
                     break;
                 case 't': case 'T': changeFormation('away', '532'); break;
-                case 'd': case 'D': 
-                    e.preventDefault();
-                    if (e.altKey) setTheme('dark');
-                    else toggleDrawingMode();
-                    break;
                 case 'l': case 'L': 
                     if (e.altKey) {
                         e.preventDefault();
                         setTheme('light');
                     }
-                    break;
-                case 'c': case 'C': 
-                    if (!e.ctrlKey) clearDrawing(); 
                     break;
                 case 'g': case 'G': showTactics(); break;
                 case 's': case 'S': 
@@ -2212,6 +2991,58 @@
         function hideTooltip() {
             document.getElementById('tooltip').classList.remove('show');
         }
+
+        // Formation Dropdown Functions
+        function toggleFormationDropdown(team) {
+            const dropdown = document.getElementById(team + 'FormationDropdown');
+            const btn = document.getElementById(team + 'FormationBtn');
+            
+            // Close other dropdown
+            const otherTeam = team === 'home' ? 'away' : 'home';
+            const otherDropdown = document.getElementById(otherTeam + 'FormationDropdown');
+            const otherBtn = document.getElementById(otherTeam + 'FormationBtn');
+            
+            if (otherDropdown.style.display === 'block') {
+                otherDropdown.style.display = 'none';
+                otherBtn.classList.remove('active');
+            }
+            
+            // Toggle current dropdown
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+                btn.classList.add('active');
+            } else {
+                dropdown.style.display = 'none';
+                btn.classList.remove('active');
+            }
+        }
+
+        function selectFormation(team, formation, displayName) {
+            // Update the button text
+            const textElement = document.getElementById(team + 'FormationText');
+            textElement.textContent = displayName;
+            
+            // Close the dropdown
+            const dropdown = document.getElementById(team + 'FormationDropdown');
+            const btn = document.getElementById(team + 'FormationBtn');
+            dropdown.style.display = 'none';
+            btn.classList.remove('active');
+            
+            // Apply the formation change
+            changeFormation(team, formation);
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.formation-selector')) {
+                document.querySelectorAll('.formation-dropdown').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+                document.querySelectorAll('.formation-dropdown-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+            }
+        });
 
         function changeFormation(team, formation) {
             if (team === 'home') {
@@ -2541,11 +3372,6 @@
         }
 
         // Advanced Features Functions
-        function toggleMatchEvents() {
-            const panel = document.getElementById('matchEvents');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        }
-
         function toggleStatistics() {
             const panel = document.getElementById('statisticsPanel');
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
@@ -2807,6 +3633,446 @@ ESC - Close Panels
                 showNotification('Exited fullscreen mode', 'info');
             }
         }
+
+        // Enhanced Team Color System
+        let teamColors = {
+            home: '#dc2626',
+            away: '#2563eb'
+        };
+
+        let gradientEnabled = {
+            home: true,
+            away: true
+        };
+
+        function changeTeamColor(team, color) {
+            teamColors[team] = color;
+            document.getElementById(team + 'ColorHex').value = color;
+            updatePlayerColors();
+            showColorChangeEffect(team);
+            showNotification(`${team.charAt(0).toUpperCase() + team.slice(1)} team color updated to ${color}`, 'success');
+        }
+
+        function changeTeamColorHex(team, color) {
+            // Validate hex color
+            if (/^#[0-9A-F]{6}$/i.test(color)) {
+                teamColors[team] = color;
+                document.getElementById(team + 'ColorPicker').value = color;
+                updatePlayerColors();
+                showColorChangeEffect(team);
+                showNotification(`${team.charAt(0).toUpperCase() + team.slice(1)} team color updated`, 'success');
+            } else {
+                showNotification('Invalid hex color format. Use #RRGGBB (e.g., #FF0000)', 'error');
+                document.getElementById(team + 'ColorHex').value = teamColors[team];
+            }
+        }
+
+        function applyPresetColor(team, color) {
+            teamColors[team] = color;
+            document.getElementById(team + 'ColorPicker').value = color;
+            document.getElementById(team + 'ColorHex').value = color;
+            updatePlayerColors();
+            showColorChangeEffect(team);
+            showNotification(`Applied preset color to ${team} team`, 'success');
+        }
+
+        function toggleGradient(team) {
+            gradientEnabled[team] = !gradientEnabled[team];
+            const btn = document.getElementById(team + 'GradientBtn');
+            btn.classList.toggle('active');
+            updatePlayerColors();
+            showNotification(`Gradient ${gradientEnabled[team] ? 'enabled' : 'disabled'} for ${team} team`, 'info');
+        }
+
+        function showColorChangeEffect(team) {
+            // Add a visual feedback effect
+            const players = document.querySelectorAll(`.${team}-player`);
+            players.forEach(player => {
+                player.style.animation = 'colorChange 0.6s ease-in-out';
+                setTimeout(() => {
+                    player.style.animation = 'playerPulse 3s ease-in-out infinite';
+                }, 600);
+            });
+        }
+
+        function updatePlayerColors() {
+            // Update home team player colors
+            document.querySelectorAll('.home-player').forEach(player => {
+                if (gradientEnabled.home) {
+                    player.style.background = `linear-gradient(135deg, ${teamColors.home}, ${adjustBrightness(teamColors.home, -20)})`;
+                } else {
+                    player.style.background = teamColors.home;
+                }
+            });
+
+            // Update away team player colors  
+            document.querySelectorAll('.away-player').forEach(player => {
+                if (gradientEnabled.away) {
+                    player.style.background = `linear-gradient(135deg, ${teamColors.away}, ${adjustBrightness(teamColors.away, -20)})`;
+                } else {
+                    player.style.background = teamColors.away;
+                }
+            });
+        }
+
+        function adjustBrightness(hex, percent) {
+            const num = parseInt(hex.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const B = (num >> 8 & 0x00FF) + amt;
+            const G = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
+        }
+
+        // Enhanced Player Management System
+        let customPlayerNames = {
+            home: { starting: [], subs: [] },
+            away: { starting: [], subs: [] }
+        };
+
+        const defaultPlayerNames = {
+            home: {
+                starting: ['Goalkeeper', 'Right Back', 'Centre Back', 'Centre Back', 'Left Back', 'Right Mid', 'Centre Mid', 'Centre Mid', 'Left Mid', 'Striker', 'Striker'],
+                subs: ['Sub GK', 'Sub Def', 'Sub Mid', 'Sub Mid', 'Sub Att', 'Sub Att', 'Sub Util']
+            },
+            away: {
+                starting: ['Goalkeeper', 'Right Back', 'Centre Back', 'Centre Back', 'Left Back', 'Right Mid', 'Centre Mid', 'Centre Mid', 'Left Mid', 'Striker', 'Striker'],
+                subs: ['Sub GK', 'Sub Def', 'Sub Mid', 'Sub Mid', 'Sub Att', 'Sub Att', 'Sub Util']
+            }
+        };
+
+        const realTeamSquads = {
+            manu: {
+                starting: ['De Gea', 'Wan-Bissaka', 'Maguire', 'Varane', 'Shaw', 'McTominay', 'Pogba', 'Bruno Fernandes', 'Sancho', 'Ronaldo', 'Rashford'],
+                subs: ['Henderson', 'Lindelof', 'Fred', 'Matic', 'Greenwood', 'Cavani', 'Lingard']
+            },
+            mancity: {
+                starting: ['Ederson', 'Walker', 'Dias', 'Laporte', 'Cancelo', 'Rodri', 'De Bruyne', 'Gundogan', 'Mahrez', 'Haaland', 'Grealish'],
+                subs: ['Ortega', 'Stones', 'Ake', 'Phillips', 'Foden', 'Alvarez', 'Palmer']
+            },
+            chelsea: {
+                starting: ['Mendy', 'James', 'Silva', 'Koulibaly', 'Chilwell', 'Kante', 'Jorginho', 'Mount', 'Sterling', 'Havertz', 'Werner'],
+                subs: ['Kepa', 'Chalobah', 'Kovacic', 'Loftus-Cheek', 'Pulisic', 'Ziyech', 'Lukaku']
+            },
+            arsenal: {
+                starting: ['Ramsdale', 'White', 'Saliba', 'Gabriel', 'Tierney', 'Partey', 'Xhaka', 'Odegaard', 'Saka', 'Jesus', 'Martinelli'],
+                subs: ['Turner', 'Holding', 'Zinchenko', 'Elneny', 'Smith Rowe', 'Nketiah', 'Vieira']
+            },
+            liverpool: {
+                starting: ['Alisson', 'Alexander-Arnold', 'Van Dijk', 'Matip', 'Robertson', 'Fabinho', 'Henderson', 'Thiago', 'Salah', 'Nunez', 'Diaz'],
+                subs: ['Kelleher', 'Konate', 'Gomez', 'Milner', 'Elliott', 'Firmino', 'Jota']
+            },
+            real: {
+                starting: ['Courtois', 'Carvajal', 'Militao', 'Alaba', 'Mendy', 'Modric', 'Casemiro', 'Kroos', 'Vinicius Jr', 'Benzema', 'Rodrygo'],
+                subs: ['Lunin', 'Nacho', 'Rudiger', 'Tchouameni', 'Valverde', 'Asensio', 'Mariano']
+            },
+            barca: {
+                starting: ['Ter Stegen', 'Kounde', 'Araujo', 'Christensen', 'Alba', 'Busquets', 'Pedri', 'Gavi', 'Dembele', 'Lewandowski', 'Raphinha'],
+                subs: ['Pena', 'Pique', 'Garcia', 'De Jong', 'Kessie', 'Ferran Torres', 'Ansu Fati']
+            },
+            psg: {
+                starting: ['Donnarumma', 'Hakimi', 'Marquinhos', 'Ramos', 'Nuno Mendes', 'Verratti', 'Vitinha', 'Fabian Ruiz', 'Messi', 'Mbappe', 'Neymar'],
+                subs: ['Navas', 'Kimpembe', 'Danilo', 'Renato Sanches', 'Soler', 'Ekitike', 'Sarabia']
+            },
+            bayern: {
+                starting: ['Neuer', 'Pavard', 'Upamecano', 'De Ligt', 'Davies', 'Kimmich', 'Goretzka', 'Muller', 'Gnabry', 'Kane', 'Coman'],
+                subs: ['Ulreich', 'Mazraoui', 'Stanisic', 'Sabitzer', 'Musiala', 'Sane', 'Tel']
+            }
+        };
+
+        function togglePlayerEditor() {
+            const editor = document.getElementById('playerEditor');
+            const isVisible = editor.style.display === 'block';
+            
+            if (isVisible) {
+                closePlayerEditor();
+            } else {
+                openPlayerEditor();
+            }
+        }
+
+        function openPlayerEditor() {
+            const editor = document.getElementById('playerEditor');
+            editor.style.display = 'block';
+            populatePlayerEditor();
+            showNotification('🚀 Player Management Studio opened', 'success');
+        }
+
+        function closePlayerEditor() {
+            const editor = document.getElementById('playerEditor');
+            editor.style.display = 'none';
+            updatePlayerNamesOnField();
+            showNotification('Player changes applied successfully! 🎉', 'success');
+        }
+
+        function populatePlayerEditor() {
+            const teams = ['home', 'away'];
+            
+            teams.forEach(team => {
+                // Starting XI
+                const startingContainer = document.getElementById(team + 'StartingEditor');
+                startingContainer.innerHTML = '';
+                
+                const startingNames = customPlayerNames[team].starting.length > 0 ? 
+                    customPlayerNames[team].starting : defaultPlayerNames[team].starting;
+                
+                startingNames.forEach((name, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'player-edit-item';
+                    item.innerHTML = `
+                        <label>${index + 1}</label>
+                        <input type="text" value="${name}" onchange="updatePlayerName('${team}', 'starting', ${index}, this.value)" placeholder="Player ${index + 1}" maxlength="15">
+                    `;
+                    startingContainer.appendChild(item);
+                });
+
+                // Substitutes
+                const subsContainer = document.getElementById(team + 'SubsEditor');
+                subsContainer.innerHTML = '';
+                
+                const subNames = customPlayerNames[team].subs.length > 0 ? 
+                    customPlayerNames[team].subs : defaultPlayerNames[team].subs;
+                
+                subNames.forEach((name, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'player-edit-item';
+                    item.innerHTML = `
+                        <label>S${index + 1}</label>
+                        <input type="text" value="${name}" onchange="updatePlayerName('${team}', 'subs', ${index}, this.value)" placeholder="Sub ${index + 1}" maxlength="15">
+                    `;
+                    subsContainer.appendChild(item);
+                });
+            });
+        }
+
+        function updatePlayerName(team, type, index, name) {
+            if (!customPlayerNames[team][type]) {
+                customPlayerNames[team][type] = [...defaultPlayerNames[team][type]];
+            }
+            customPlayerNames[team][type][index] = name.trim() || defaultPlayerNames[team][type][index];
+        }
+
+        function quickFillTeam() {
+            const select = document.getElementById('quickFillSelect');
+            const teamKey = select.value;
+            
+            if (teamKey === 'random') {
+                randomizeNames();
+                return;
+            }
+            
+            if (!teamKey || !realTeamSquads[teamKey]) return;
+            
+            const squad = realTeamSquads[teamKey];
+            customPlayerNames.home.starting = [...squad.starting];
+            customPlayerNames.home.subs = [...squad.subs];
+            
+            populatePlayerEditor();
+            showNotification(`🏆 ${select.options[select.selectedIndex].text} squad loaded!`, 'success');
+            select.value = '';
+        }
+
+        function randomizeNames() {
+            const firstNames = ['Alex', 'Jordan', 'Casey', 'Morgan', 'Taylor', 'Riley', 'Avery', 'Cameron', 'Quinn', 'Sage', 'Rowan', 'Blake'];
+            const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez'];
+            
+            ['home', 'away'].forEach(team => {
+                customPlayerNames[team].starting = customPlayerNames[team].starting.map(() => {
+                    const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+                    const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+                    return `${first} ${last}`;
+                });
+                
+                customPlayerNames[team].subs = customPlayerNames[team].subs.map(() => {
+                    const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+                    const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+                    return `${first} ${last}`;
+                });
+            });
+            
+            populatePlayerEditor();
+            showNotification('🎲 Random names generated for all players!', 'success');
+        }
+
+        function swapTeams() {
+            const tempHome = {
+                starting: [...customPlayerNames.home.starting],
+                subs: [...customPlayerNames.home.subs]
+            };
+            
+            customPlayerNames.home.starting = [...customPlayerNames.away.starting];
+            customPlayerNames.home.subs = [...customPlayerNames.away.subs];
+            customPlayerNames.away.starting = [...tempHome.starting];
+            customPlayerNames.away.subs = [...tempHome.subs];
+            
+            populatePlayerEditor();
+            showNotification('🔄 Teams swapped successfully!', 'success');
+        }
+
+        function savePlayerData() {
+            const data = {
+                players: customPlayerNames,
+                colors: teamColors,
+                gradients: gradientEnabled,
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'football-squad-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('💾 Squad data saved successfully!', 'success');
+        }
+
+        function updatePlayerNamesOnField() {
+            // Update starting XI names on field
+            document.querySelectorAll('.home-player').forEach((player, index) => {
+                const nameDiv = player.querySelector('.player-name-display');
+                if (nameDiv && customPlayerNames.home.starting[index]) {
+                    nameDiv.textContent = customPlayerNames.home.starting[index].substring(0, 10);
+                }
+            });
+
+            document.querySelectorAll('.away-player').forEach((player, index) => {
+                const nameDiv = player.querySelector('.player-name-display');
+                if (nameDiv && customPlayerNames.away.starting[index]) {
+                    nameDiv.textContent = customPlayerNames.away.starting[index].substring(0, 10);
+                }
+            });
+
+            // Update substitutes panel if visible
+            updateSubstitutesPanel();
+        }
+
+        function updateSubstitutesPanel() {
+            const homeSubsList = document.getElementById('homeSubsList');
+            const awaySubsList = document.getElementById('awaySubsList');
+            
+            if (homeSubsList) {
+                const homeSubsNames = customPlayerNames.home.subs.length > 0 ? 
+                    customPlayerNames.home.subs : defaultPlayerNames.home.subs;
+                homeSubsNames.forEach((name, index) => {
+                    const subElement = homeSubsList.children[index];
+                    if (subElement) {
+                        subElement.innerHTML = `<span class="sub-number">S${index + 1}</span>${name}`;
+                    }
+                });
+            }
+            
+            if (awaySubsList) {
+                const awaySubsNames = customPlayerNames.away.subs.length > 0 ? 
+                    customPlayerNames.away.subs : defaultPlayerNames.away.subs;
+                awaySubsNames.forEach((name, index) => {
+                    const subElement = awaySubsList.children[index];
+                    if (subElement) {
+                        subElement.innerHTML = `<span class="sub-number">S${index + 1}</span>${name}`;
+                    }
+                });
+            }
+        }
+
+        function resetPlayerNames() {
+            customPlayerNames = {
+                home: { starting: [...defaultPlayerNames.home.starting], subs: [...defaultPlayerNames.home.subs] },
+                away: { starting: [...defaultPlayerNames.away.starting], subs: [...defaultPlayerNames.away.subs] }
+            };
+            populatePlayerEditor();
+            updatePlayerNamesOnField();
+            showNotification('🔄 All player names reset to default', 'info');
+        }
+
+        // Additional new functions for enhanced features
+        function toggleSquadBuilder() {
+            showNotification('🏗️ Squad Builder - Advanced feature coming soon!', 'info');
+        }
+
+        function importExportPlayers() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            if (data.players) {
+                                customPlayerNames = data.players;
+                                if (data.colors) teamColors = data.colors;
+                                if (data.gradients) gradientEnabled = data.gradients;
+                                
+                                updatePlayerColors();
+                                populatePlayerEditor();
+                                updatePlayerNamesOnField();
+                                showNotification('📥 Squad data imported successfully!', 'success');
+                            }
+                        } catch (error) {
+                            showNotification('❌ Invalid file format', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+                switch(event.code) {
+                    case 'KeyN':
+                        if (!event.ctrlKey && !event.altKey) {
+                            event.preventDefault();
+                            togglePlayerEditor();
+                        }
+                        break;
+                    case 'KeyB':
+                        if (!event.ctrlKey && !event.altKey) {
+                            event.preventDefault();
+                            toggleSquadBuilder();
+                        }
+                        break;
+                    case 'KeyR':
+                        if (event.shiftKey && !event.ctrlKey && !event.altKey) {
+                            event.preventDefault();
+                            randomizeNames();
+                        }
+                        break;
+                    case 'KeyI':
+                        if (!event.ctrlKey && !event.altKey && !event.shiftKey) {
+                            event.preventDefault();
+                            importExportPlayers();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Add CSS animation for color changes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes colorChange {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize enhanced features when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePlayerColors();
+            // Initialize custom player names arrays
+            customPlayerNames = {
+                home: { starting: [...defaultPlayerNames.home.starting], subs: [...defaultPlayerNames.home.subs] },
+                away: { starting: [...defaultPlayerNames.away.starting], subs: [...defaultPlayerNames.away.subs] }
+            };
+        });
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984c71aa37928f68',t:'MTc1ODgyMzQ2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
