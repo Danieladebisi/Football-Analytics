@@ -98,9 +98,31 @@
             border-bottom: 2px solid var(--accent-action);
         }
 
-        .logo-container {
+        /* Enhanced Top Bar & Navigation Styles */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1500;
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            padding: 12px 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent-action);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 1rem;
+            width: 100%;
         }
 
         .logo {
@@ -112,12 +134,94 @@
             border-radius: 25px;
             border: 2px solid rgba(220, 38, 38, 0.3);
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .logo:hover {
             background: rgba(220, 38, 38, 0.2);
             border-color: rgba(220, 38, 38, 0.5);
             transform: translateY(-1px);
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            padding: 0.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #000;
+            background: #FFC300;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 195, 0, 0.3);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 25px;
+            transition: background 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #5E3A84, #FFC300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-points {
+            background: #059669;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
         }
 
         .football-icon {
@@ -1561,27 +1665,115 @@
             background: var(--accent-action);
             transform: scale(1.05);
         }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid #FFC300;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #FFC300;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #FFC300;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #475569;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: #94a3b8;
+        }
+
+        .powered-by a {
+            color: #FFC300;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #FFC300;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body data-theme="dark">
-    <!-- Logo & Theme Switcher -->
-    <div class="top-bar">
-        <div class="logo-container">
-            <div class="logo">
-                <div class="football-icon">
-                    <img src="images/Fans Talk 90 Logo PNG.png" alt="Fans Talk 90 Logo" width="40" height="40" />
-                </div>
+    <!-- Consistent Header -->
+    <header class="top-bar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="https://i.ibb.co/6y43y5x/Fans-Talk-90-Logo-PNG.png" alt="Fans Talk 90 Logo" />
                 <div class="logo-text">
                     <span class="brand-name">Fans Talk 90</span>
                     <span class="brand-tagline">Tactical Analysis</span>
                 </div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">🏠 Community</a></li>
+                    <li><a href="analytics.html" class="active">📊 Tactical Analysis</a></li>
+                    <li><a href="playerrating.html">⭐ Player Ratings</a></li>
+                    <li><a href="livescore.html">⚽ Live Scores</a></li>
+                </ul>
+            </nav>
+            <div class="header-controls">
+                <div class="theme-switcher">
+                    <button class="theme-btn active" onclick="setTheme('dark')" title="Dark Theme (Alt+D)">🌙</button>
+                    <button class="theme-btn" onclick="setTheme('light')" title="Light Theme (Alt+L)">☀️</button>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">BA</div>
+                    <div class="user-points">1,250 pts</div>
+                </div>
             </div>
         </div>
-        <div class="theme-switcher">
-            <button class="theme-btn active" onclick="setTheme('dark')" title="Dark Theme (Alt+D)">🌙</button>
-            <button class="theme-btn" onclick="setTheme('light')" title="Light Theme (Alt+L)">☀️</button>
-        </div>
-    </div>
+    </header>
 
     <!-- Fullscreen Exit Button -->
     <button class="fullscreen-exit-btn" id="fullscreen-exit-btn" onclick="exitFullscreen()" title="Exit Fullscreen (ESC or F)">
@@ -3899,5 +4091,55 @@ ESC - Close Panels
             };
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984c71aa37928f68',t:'MTc1ODgyMzQ2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>🏆 Community</h4>
+                <ul>
+                    <li><a href="index.html">Team Groups</a></li>
+                    <li><a href="#">Fantasy Leagues</a></li>
+                    <li><a href="#">Leaderboards</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>⚽ Tools</h4>
+                <ul>
+                    <li><a href="analytics.html">Tactical Analysis</a></li>
+                    <li><a href="playerrating.html">Player Ratings</a></li>
+                    <li><a href="livescore.html">Live Scores</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>📱 Connect</h4>
+                <ul>
+                    <li><a href="#">Download Mobile App</a></li>
+                    <li><a href="#">Join Discord</a></li>
+                    <li><a href="#">Follow on Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>ℹ️ Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Fans Talk 90. All rights reserved.</p>
+            <div class="powered-by">
+                <span>⚡ Powered by </span>
+                <a href="https://userfriendlysites.com" target="_blank" rel="noopener noreferrer">UserFriendlySites.com</a>
+            </div>
+            <div class="social-links">
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="Discord">💬</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984c71aa37928f68',t:'MTc1ODgyMzQ2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
