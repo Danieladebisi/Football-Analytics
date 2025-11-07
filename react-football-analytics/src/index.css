@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    height: 100%;
+  }
+  body {
+    @apply font-sans transition-colors duration-300;
+    min-height: 100vh;
+  }
+  
+  /* Light theme */
+  .light body {
+    @apply bg-gray-50 text-gray-900;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+  }
+  
+  /* Dark theme */
+  .dark body {
+    @apply bg-slate-900 text-white;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  }
+  
+  #root {
+    min-height: 100vh;
+    width: 100%;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-md border transition-colors duration-300;
+  }
+  
+  .glass.light {
+    @apply bg-white/80 border-gray-200;
+  }
+  
+  .glass.dark {
+    @apply bg-white/10 border-white/20;
+  }
+  
+  .card {
+    @apply glass rounded-xl p-6 shadow-xl;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+  
+  .btn-accent {
+    @apply bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-900 px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+  
+  .nav-link {
+    @apply transition-colors duration-200 px-4 py-2 rounded-lg;
+  }
+  
+  .light .nav-link {
+    @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100;
+  }
+  
+  .dark .nav-link {
+    @apply text-gray-300 hover:text-white hover:bg-white/10;
+  }
+  
+  .nav-link.active {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+  
+  .light .nav-link.active {
+    @apply bg-blue-50;
+  }
+  
+  .dark .nav-link.active {
+    @apply bg-blue-400/10;
+  }
+  
+  /* Theme transition classes */
+  .theme-transition {
+    @apply transition-colors duration-300 ease-in-out;
+  }
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 25%, #8b5cf6 50%, #ec4899 75%, #f59e0b 100%);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #0ea5e9, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
